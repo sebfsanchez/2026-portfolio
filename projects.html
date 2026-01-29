@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Sebastian Sanchez</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
+  <style>
+    /* Override body styles for this page */
+    html, body {
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      height: 100vh !important;
+    }
+
+    /* Projects layout */
+    .projects-container {
+      display: flex;
+      gap: 4rem;
+      padding: 2rem 3rem;
+      max-width: 1400px;
+      min-height: calc(100vh - 100px);
+    }
+
+    /* Left side - project list */
+    .projects-list {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      padding-top: 0.5rem;
+    }
+
+    .project-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      padding: 0.25rem 0.5rem;
+      margin-left: -0.5rem;
+      width: fit-content;
+      position: relative;
+    }
+
+    .project-item:hover {
+      background-color: #DFFF00;
+    }
+
+    .project-skills {
+      display: none;
+    }
+
+    /* Skills ticker */
+    .skills-ticker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 30px;
+      overflow: hidden;
+      background-color: var(--color-bg);
+      z-index: 9998;
+      display: none;
+    }
+
+    .skills-ticker.active {
+      display: block;
+    }
+
+    .skills-ticker-content {
+      display: flex;
+      gap: 4rem;
+      white-space: nowrap;
+      animation: ticker 15s linear infinite;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text);
+      padding-top: 6px;
+    }
+
+    .skills-ticker-content span {
+      flex-shrink: 0;
+    }
+
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .project-number {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .project-name {
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .project-name:hover {
+      text-decoration: none;
+    }
+
+    /* Right side - empty space for hover images */
+    .projects-right {
+      flex: 1;
+      position: relative;
+    }
+
+    /* Hover images container */
+    .project-images {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 320px;
+      right: 0;
+      display: none;
+      flex-wrap: nowrap;
+      gap: 40px;
+      pointer-events: auto;
+      padding-right: 60px;
+      align-items: flex-start;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .project-images::-webkit-scrollbar {
+      display: none;
+    }
+
+    .project-images.active {
+      cursor: grab;
+    }
+
+    .project-images.dragging {
+      cursor: grabbing;
+    }
+
+    .project-images.active {
+      display: flex;
+    }
+
+    .project-images img {
+      height: 70vh;
+      width: auto;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .project-images.active img {
+      opacity: 1;
+    }
+
+    .project-images.active img:hover {
+      opacity: 0.8;
+    }
+
+    .image-wrapper {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .image-caption {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      margin-top: 0.5rem;
+      max-width: 300px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .image-wrapper:hover .image-caption {
+      opacity: 1;
+    }
+
+    /* Lightbox overlay */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      cursor: pointer;
+      pointer-events: none;
+      transition: background 0.3s ease;
+    }
+
+    .lightbox.active {
+      background: rgba(0, 0, 0, 0.9);
+      pointer-events: auto;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      transform: scale(0.3);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
+
+    .lightbox.active img {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .lightbox-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #FF46A2;
+      font-size: 3rem;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 1rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10001;
+    }
+
+    .lightbox.active .lightbox-arrow {
+      opacity: 0.85;
+    }
+
+    .lightbox.active .lightbox-arrow:hover {
+      opacity: 1;
+    }
+
+    .lightbox-prev {
+      left: 2rem;
+    }
+
+    .lightbox-next {
+      right: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .lightbox-arrow {
+        display: none;
+      }
+    }
+
+    /* Footer positioning */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background-color: var(--color-bg);
+    }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+      html, body {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        height: auto !important;
+      }
+
+      .projects-container {
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+
+      .projects-list {
+        gap: 0.8rem;
+        position: relative;
+        z-index: 100;
+      }
+
+      .project-images {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        transform: none;
+        flex-direction: column;
+        padding: 1rem;
+        padding-bottom: 100px;
+        overflow: visible;
+        gap: 20px;
+      }
+
+      .project-images img {
+        height: auto;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .image-wrapper {
+        width: 100%;
+      }
+
+      .image-caption {
+        opacity: 1;
+        max-width: 100%;
+      }
+
+      .skills-ticker {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+
+      footer {
+        position: relative;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="projects-container">
+    <!-- Left side - Project list -->
+    <div class="projects-list">
+      <a href="project-augmented-intelligence.html" class="project-item" data-project="augmented" data-skills="Curation, Sales, Exhibition Design, Planning, Production">
+        <span class="project-number">[01]</span>
+        <span class="project-name">Augmented Intelligence</span>
+      </a>
+      <a href="project-goal-in-life.html" class="project-item" data-project="goal" data-skills="A Goal in Life">
+        <span class="project-number">[02]</span>
+        <span class="project-name">A Goal in Life</span>
+      </a>
+      <a href="project-on-nfts.html" class="project-item" data-project="nfts" data-skills="On NFTs">
+        <span class="project-number">[03]</span>
+        <span class="project-name">On NFTs</span>
+      </a>
+      <a href="project-keith-haring.html" class="project-item" data-project="keith" data-skills="Keith Haring">
+        <span class="project-number">[04]</span>
+        <span class="project-name">Keith Haring</span>
+      </a>
+      <a href="project-anxious-men.html" class="project-item" data-project="anxious" data-skills="Anxious Men">
+        <span class="project-number">[05]</span>
+        <span class="project-name">Anxious Men</span>
+      </a>
+    </div>
+
+    <!-- Right side - Hover images area -->
+    <div class="projects-right">
+      <div class="project-images" data-project="augmented">
+        <div class="image-wrapper">
+          <img src="images/augmented-intelligence/augmented1.jpg" alt="Augmented Intelligence 1">
+          <span class="image-caption">Install shot, Embedding Study 1 & 2 (from xhairymutantx) by Holly Herndon & Mat Dryhurst</span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/augmented-intelligence/augmented2.png" alt="Augmented Intelligence 2">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/augmented-intelligence/augmented3.png" alt="Augmented Intelligence 3">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/augmented-intelligence/augmented4.png" alt="Augmented Intelligence 4">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/augmented-intelligence/augmented5.png" alt="Augmented Intelligence 5">
+          <span class="image-caption"></span>
+        </div>
+      </div>
+      <div class="project-images" data-project="goal">
+        <div class="image-wrapper">
+          <img src="images/goal-in-life/goal1.webp" alt="A Goal in Life 1">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/goal-in-life/goal2.jpg" alt="A Goal in Life 2">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/goal-in-life/goal3.avif" alt="A Goal in Life 3">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/goal-in-life/goal4.png" alt="A Goal in Life 4">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/goal-in-life/goal5.png" alt="A Goal in Life 5">
+          <span class="image-caption"></span>
+        </div>
+      </div>
+      <div class="project-images" data-project="nfts">
+        <div class="image-wrapper">
+          <img src="images/nfts1.jpg" alt="On NFTs 1">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/nfts2.jpg" alt="On NFTs 2">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/nfts3.jpg" alt="On NFTs 3">
+          <span class="image-caption"></span>
+        </div>
+      </div>
+      <div class="project-images" data-project="keith">
+        <div class="image-wrapper">
+          <img src="images/keith1.jpg" alt="Keith Haring 1">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/keith2.jpg" alt="Keith Haring 2">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/keith3.jpg" alt="Keith Haring 3">
+          <span class="image-caption"></span>
+        </div>
+      </div>
+      <div class="project-images" data-project="anxious">
+        <div class="image-wrapper">
+          <img src="images/anxious1.jpg" alt="Anxious Men 1">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/anxious2.jpg" alt="Anxious Men 2">
+          <span class="image-caption"></span>
+        </div>
+        <div class="image-wrapper">
+          <img src="images/anxious3.jpg" alt="Anxious Men 3">
+          <span class="image-caption"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills ticker -->
+  <div class="skills-ticker" id="skills-ticker">
+    <div class="skills-ticker-content"></div>
+  </div>
+
+  <!-- Lightbox for enlarged images -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-arrow lightbox-prev">&larr;</button>
+    <img src="" alt="Enlarged image">
+    <button class="lightbox-arrow lightbox-next">&rarr;</button>
+  </div>
+
+  <!-- Footer with nav -->
+  <footer>
+    <nav class="top-nav">
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="cv.pdf" target="_blank">CV</a>
+      <a href="index.html" class="footer-link">&copy; 2026 Sebastian Sanchez</a>
+    </nav>
+  </footer>
+
+  <script>
+    // Cursor echo effect
+    let lastEchoTime = 0;
+    const echoInterval = 25;
+
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastEchoTime < echoInterval) return;
+      lastEchoTime = now;
+
+      const dot = document.createElement('div');
+      dot.style.cssText = `
+        position: fixed;
+        left: ${e.clientX}px;
+        top: ${e.clientY}px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #FF46A2;
+        pointer-events: none;
+        z-index: 9998;
+        opacity: 0.5;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.15s ease-out;
+      `;
+
+      document.body.appendChild(dot);
+
+      setTimeout(() => {
+        dot.style.opacity = '0';
+        setTimeout(() => dot.remove(), 150);
+      }, 50);
+    });
+
+    // Hover to show project images with random positions
+    const projectItems = document.querySelectorAll('.project-item');
+    const projectImageSets = document.querySelectorAll('.project-images');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+
+    // Apply staggered fade-in
+    projectImageSets.forEach(set => {
+      const wrappers = set.querySelectorAll('.image-wrapper');
+      wrappers.forEach((wrapper, index) => {
+        const img = wrapper.querySelector('img');
+        if (img) img.style.transitionDelay = (index * 0.1) + 's';
+      });
+    });
+
+    // Drag to scroll - using document level events
+    let isDragging = false;
+    let dragSet = null;
+    let dragStartX = 0;
+    let dragScrollLeft = 0;
+
+    document.addEventListener('mousedown', (e) => {
+      const set = e.target.closest('.project-images.active');
+      if (!set) return;
+
+      dragSet = set;
+      dragStartX = e.pageX;
+      dragScrollLeft = set.scrollLeft;
+      isDragging = false;
+      set.classList.add('dragging');
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!dragSet) return;
+
+      const walk = e.pageX - dragStartX;
+      if (Math.abs(walk) > 5) {
+        isDragging = true;
+      }
+      dragSet.scrollLeft = dragScrollLeft - walk;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (dragSet) {
+        dragSet.classList.remove('dragging');
+        dragSet = null;
+        setTimeout(() => { isDragging = false; }, 50);
+      }
+    });
+
+    const skillsTicker = document.getElementById('skills-ticker');
+    const skillsTickerContent = skillsTicker.querySelector('.skills-ticker-content');
+
+    projectItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        const projectId = item.dataset.project;
+        const skills = item.dataset.skills;
+
+        // Hide all image sets
+        projectImageSets.forEach(set => {
+          set.classList.remove('active');
+        });
+        // Show matching image set (positions already set on load)
+        const targetSet = document.querySelector(`.project-images[data-project="${projectId}"]`);
+        if (targetSet) {
+          targetSet.classList.add('active');
+        }
+
+        // Show skills ticker
+        if (skills) {
+          const skillsArray = skills.split(', ');
+          // Duplicate enough times to fill the page
+          let repeated = [];
+          for (let i = 0; i < 20; i++) {
+            repeated = repeated.concat(skillsArray);
+          }
+          const tickerHTML = repeated.map(s => `<span>${s}</span>`).join('');
+          skillsTickerContent.innerHTML = tickerHTML;
+          // Restart animation
+          skillsTickerContent.style.animation = 'none';
+          skillsTickerContent.offsetHeight; // Trigger reflow
+          skillsTickerContent.style.animation = '';
+          skillsTicker.classList.add('active');
+        } else {
+          skillsTicker.classList.remove('active');
+        }
+      });
+      // Images stay visible - no mouseleave handler to hide them
+    });
+
+    // Lightbox state
+    let currentImages = [];
+    let currentIndex = 0;
+
+    // Click on project images to open lightbox
+    document.querySelectorAll('.project-images').forEach(container => {
+      const images = container.querySelectorAll('img');
+      images.forEach((img, index) => {
+        img.addEventListener('click', (e) => {
+          if (isDragging) return;
+          e.preventDefault();
+          e.stopPropagation();
+          currentImages = Array.from(images);
+          currentIndex = index;
+          lightboxImg.src = img.src;
+          lightbox.classList.add('active');
+        });
+      });
+    });
+
+    function showImage(index) {
+      if (index < 0) index = currentImages.length - 1;
+      if (index >= currentImages.length) index = 0;
+      currentIndex = index;
+      lightboxImg.src = currentImages[currentIndex].src;
+    }
+
+    // Arrow buttons
+    document.querySelector('.lightbox-prev').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showImage(currentIndex - 1);
+    });
+
+    document.querySelector('.lightbox-next').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showImage(currentIndex + 1);
+    });
+
+    // Click lightbox background to close
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+        lightboxImg.src = '';
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+
+      if (e.key === 'Escape') {
+        lightbox.classList.remove('active');
+        lightboxImg.src = '';
+      } else if (e.key === 'ArrowLeft') {
+        showImage(currentIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        showImage(currentIndex + 1);
+      }
+    });
+  </script>
+</body>
+</html>

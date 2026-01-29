@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sebastian Sanchez</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
+</head>
+<body>
+
+  <!-- Top nav -->
+  <header>
+    <nav class="top-nav">
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="cv.pdf" target="_blank">CV</a>
+    </nav>
+  </header>
+
+  <!-- Floating contact link -->
+  <a href="mailto:sebfsanchez@gmail.com" target="_blank" class="floating-contact">
+    <span>Sebastian Sanchez</span>
+    <span>sebfsanchez@gmail.com</span>
+  </a>
+
+  <main>
+    <!-- Hero carousel -->
+    <div class="carousel">
+      <div class="carousel-track">
+        <img src="images/homepage/hero.jpg" alt="Image 1" class="carousel-slide active">
+      </div>
+      <div class="carousel-cursor"></div>
+    </div>
+
+    <!-- Hidden image sources for scattering -->
+    <div id="image-sources" style="display: none;">
+      <img src="images/homepage/slide2.png" alt="Image 2">
+      <img src="images/homepage/slide3.JPG" alt="Image 3">
+      <img src="images/homepage/slide4.JPG" alt="Image 4">
+      <img src="images/homepage/slide5.jpg" alt="Image 5">
+      <img src="images/homepage/slide6.JPG" alt="Image 6">
+      <img src="images/homepage/slide7.JPG" alt="Image 7">
+      <img src="images/homepage/slide8.png" alt="Image 8">
+      <img src="images/homepage/slide9.JPG" alt="Image 9">
+      <img src="images/homepage/slide10.JPG" alt="Image 10">
+    </div>
+
+    <!-- Bio block -->
+    <div class="bio">
+      <p>
+        Sebastian Sanchez is a Digital Art Strategist at Brevan Howard, where he advises on the acquisition, stewardship, and management of digital art as part of a family office investment strategy. He also teaches at Columbia University, where his graduate course examines art and technology through historical and market frameworks, and he is a mentor at NEW INC, the New Museum's incubator for art, design, and technology.
+      </p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <a href="index.html" class="footer-link">&copy; 2026 Sebastian Sanchez</a>
+  </footer>
+
+  <!-- Drawing mode UI -->
+  <button class="draw-button">DRAW :)</button>
+  <div class="draw-overlay">
+    <canvas id="draw-canvas"></canvas>
+    <div class="color-palette">
+      <button class="color-swatch active" data-color="#FF46A2" style="background-color: #FF46A2;"></button>
+      <button class="color-swatch" data-color="#DFFF00" style="background-color: #DFFF00;"></button>
+      <button class="color-swatch eraser" data-color="eraser" title="Eraser"></button>
+      <button class="palette-btn undo-btn" title="Undo">↩</button>
+      <button class="palette-btn redo-btn" title="Redo">↪</button>
+    </div>
+    <button class="draw-send">SAVE & SEND</button>
+    <button class="draw-close">CLOSE</button>
+    <div class="name-popup">
+      <div class="name-popup-content">
+        <label for="drawer-name">Enter your name:</label>
+        <input type="text" id="drawer-name" placeholder="Your name">
+        <div class="name-popup-buttons">
+          <button class="name-cancel">Cancel</button>
+          <button class="name-submit">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

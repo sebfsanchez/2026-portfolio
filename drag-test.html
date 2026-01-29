@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drag Test</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #f0eee9;
+    }
+    #dragme {
+      position: absolute;
+      left: 100px;
+      top: 100px;
+      width: 200px;
+      cursor: grab;
+    }
+    #dragme.active {
+      cursor: grabbing;
+    }
+  </style>
+</head>
+<body>
+  <img id="dragme" src="images/hero.jpg" draggable="false">
+  <script>
+    var img = document.getElementById('dragme');
+    var active = false;
+    var startX, startY, imgX, imgY;
+
+    img.onmousedown = function(e) {
+      active = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      imgX = img.offsetLeft;
+      imgY = img.offsetTop;
+      img.classList.add('active');
+    };
+
+    window.onmousemove = function(e) {
+      if (!active) return;
+      img.style.left = (imgX + e.clientX - startX) + 'px';
+      img.style.top = (imgY + e.clientY - startY) + 'px';
+    };
+
+    window.onmouseup = function() {
+      active = false;
+      img.classList.remove('active');
+    };
+  </script>
+</body>
+</html>

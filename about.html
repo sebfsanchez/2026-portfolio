@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Sebastian Sanchez</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
+  <style>
+    /* Override body styles for this page */
+    html, body {
+      overflow: auto !important;
+      height: auto !important;
+      min-height: 100vh;
+    }
+
+    /* Top grid layout */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 3fr 1fr 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem 3rem 2rem 0;
+      max-width: 1100px;
+      margin: 0 0 0 auto;
+    }
+
+    .about-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .about-column h3 {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .about-column p,
+    .about-column li {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .about-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .about-column a {
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: background-color 0.2s ease;
+      padding: 0.2rem 0.4rem;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .about-column a:hover {
+      background-color: #DFFF00;
+    }
+
+    /* Social links column */
+    .social-links {
+      position: fixed;
+      top: 1.25rem;
+      left: 2rem;
+      z-index: 100;
+    }
+
+    .social-links a {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 0.15rem;
+    }
+
+    /* Span columns for wider content */
+    .col-span-2 {
+      grid-column: span 2;
+    }
+
+    .col-span-4 {
+      grid-column: span 4;
+    }
+
+    /* Draggable images */
+    .drag-img {
+      position: absolute;
+      cursor: grab;
+      max-width: 320px;
+      height: auto;
+    }
+
+    .drag-img.dragging {
+      cursor: grabbing;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+
+    /* Keep images in bounds on smaller screens */
+    @media (max-width: 1200px) {
+      .drag-img {
+        max-width: 250px;
+      }
+    }
+
+    /* Stack images when aspect ratio is not wide enough (less than 16:9) */
+    @media (max-aspect-ratio: 16/9) {
+      .drag-img {
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 400px !important;
+        margin-bottom: 1rem;
+        cursor: default;
+      }
+
+      .image-stack {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 2rem;
+        margin-top: 2rem;
+        padding-bottom: 80px;
+      }
+
+      footer {
+        position: relative;
+      }
+
+      .social-links {
+        position: relative;
+        top: auto;
+        left: auto;
+        padding: 1rem 2rem;
+      }
+
+      .about-grid {
+        margin: 0;
+        padding: 1rem 2rem;
+      }
+    }
+
+    /* Additional mobile adjustments */
+    @media (max-width: 768px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .drag-img {
+        max-width: 100% !important;
+      }
+    }
+
+    /* Footer positioning */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background-color: var(--color-bg);
+    }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        padding: 70px 1.5rem 2rem;
+      }
+
+      .col-span-2 {
+        grid-column: span 1;
+      }
+    }
+
+    /* Drawing mode */
+    .draw-button {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 2rem;
+      font-family: var(--font-main);
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 0.75rem;
+      z-index: 10000;
+      transition: background-color 0.2s ease;
+    }
+
+    .draw-button:hover {
+      background-color: #DFFF00;
+    }
+
+    .draw-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-bg);
+      z-index: 10000;
+      display: none;
+    }
+
+    .draw-overlay.active {
+      display: block;
+    }
+
+    .draw-images {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .draw-img {
+      position: absolute;
+      height: auto;
+      max-width: 320px;
+      pointer-events: none;
+    }
+
+    #draw-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="%23222222" stroke-width="2"/><line x1="12" y1="4" x2="12" y2="20" stroke="%23222222" stroke-width="2"/><line x1="4" y1="12" x2="20" y2="12" stroke="%23222222" stroke-width="2"/></svg>') 12 12, crosshair;
+    }
+
+    .color-palette {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 2rem;
+      display: grid;
+      grid-template-columns: repeat(4, 36px);
+      gap: 0.75rem;
+      z-index: 10001;
+    }
+
+    .color-swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.1);
+    }
+
+    .color-swatch.active {
+      border-color: var(--color-text);
+    }
+
+    .color-swatch.eraser {
+      background: linear-gradient(135deg, #fff 45%, #ccc 45%, #ccc 55%, #fff 55%);
+      border: 2px solid #999;
+    }
+
+    .color-swatch.eraser.active {
+      border-color: var(--color-text);
+    }
+
+    .palette-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--color-text);
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .palette-btn:hover {
+      transform: scale(1.1);
+      background-color: #DFFF00;
+    }
+
+    .draw-send {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-main);
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background-color: var(--color-text);
+      color: var(--color-bg);
+      border: 2px solid var(--color-text);
+      cursor: pointer;
+      padding: 0.75rem 1.5rem;
+      z-index: 10001;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .draw-send:hover {
+      background-color: #DFFF00;
+      color: var(--color-text);
+      border-color: #DFFF00;
+    }
+
+    .draw-close {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 2rem;
+      font-family: var(--font-main);
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 0.75rem;
+      z-index: 10001;
+      transition: background-color 0.2s ease;
+    }
+
+    .draw-close:hover {
+      background-color: #FF46A2;
+    }
+
+    .name-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10002;
+    }
+
+    .name-popup.active {
+      display: flex;
+    }
+
+    .name-popup-content {
+      background: var(--color-bg);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-width: 300px;
+    }
+
+    .name-popup-content label {
+      font-family: var(--font-main);
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .name-popup-content input {
+      font-family: var(--font-main);
+      font-size: 16px;
+      padding: 0.75rem;
+      border: 2px solid var(--color-text);
+      background: transparent;
+      outline: none;
+    }
+
+    .name-popup-content input:focus {
+      border-color: #FF46A2;
+    }
+
+    .name-popup-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .name-popup-buttons button {
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .name-cancel {
+      background: transparent;
+      border: 2px solid var(--color-text);
+    }
+
+    .name-cancel:hover {
+      background-color: #ccc;
+    }
+
+    .name-submit {
+      background: var(--color-text);
+      color: var(--color-bg);
+      border: 2px solid var(--color-text);
+    }
+
+    .name-submit:hover {
+      background-color: #DFFF00;
+      color: var(--color-text);
+      border-color: #DFFF00;
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- Social Links - fixed top left -->
+  <div class="about-column social-links">
+    <a href="mailto:sebfsanchez@gmail.com">Mail</a>
+    <a href="https://www.linkedin.com/in/sebfsanchez/" target="_blank">LinkedIn</a>
+    <a href="https://www.instagram.com/sebastianss" target="_blank">Instagram</a>
+    <a href="https://x.com/sebastianss527" target="_blank">X</a>
+  </div>
+
+  <!-- About content grid -->
+  <div class="about-grid">
+
+    <!-- Column 1: Bio -->
+    <div class="about-column">
+      <p>Sebastian Sanchez is a Digital Art Strategist at Brevan Howard, where he advises on the acquisition, stewardship, and management of digital art as part of a family office investment strategy.</p>
+      <p>Previously, he was Manager of Digital Art Sales at Christie's, where he led auctions, exhibitions, and partnerships that brought an emerging digital art market to a global stage. His work included the $1.87 million sale of A Goal in Life: Leo Messi x Refik Anadol, the Augmented Intelligence auction focused on AI-generated work, and collaborations with partners such as Gucci and TASCHEN.</p>
+      <p>Before joining Christie's, Sanchez co-founded ARTXCODE, a platform focused on generative art. Earlier in his career, he led artist collaborations across contemporary art, working with figures including Cindy Sherman, Barbara Kruger, Rashid Johnson, and Robert Longo.</p>
+      <p>He teaches at Columbia University, where his graduate course examines art and technology through historical and market frameworks. He is also a mentor at NEW INC, the New Museum's incubator for art, design, and technology.</p>
+    </div>
+
+    <!-- Column 3: Experience -->
+    <div class="about-column">
+      <h3>Experience</h3>
+      <ul>
+        <li>Brevan Howard</li>
+        <li>Christie's</li>
+        <li>Columbia University</li>
+        <li>NEW INC</li>
+        <li>ARTXCODE</li>
+      </ul>
+    </div>
+
+    <!-- Column 4: Education -->
+    <div class="about-column">
+      <h3>Education</h3>
+      <ul>
+        <li>Parsons Design School</li>
+        <li>Strategic Design & Management, 2015</li>
+      </ul>
+    </div>
+
+    <!-- Column 5: Skills -->
+    <div class="about-column">
+      <h3>Skills</h3>
+      <ul>
+        <li>Digital Asset Strategy</li>
+        <li>Collection Advisory</li>
+        <li>Thought Leadership</li>
+        <li>Cross-Functional Collaboration</li>
+        <li>Creative Partnerships</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Draggable images -->
+  <div class="image-stack">
+    <!-- <img src="images/about/about1.jpeg" alt="Image 1" class="drag-img" draggable="false"
+         style="right: 3vw; top: 269px; width: 14vw; min-width: 180px; z-index: 999;"> -->
+    <!-- <img src="images/about/about2.JPG" alt="Image 2" class="drag-img" draggable="false"
+         style="right: calc(5vw - 20px); top: 568px; width: 17vw; min-width: 220px; z-index: 998;"> -->
+    <!-- <img src="images/about/about3.JPG" alt="Image 3" class="drag-img" draggable="false"
+         style="right: 22vw; top: 488px; width: 16vw; min-width: 200px; z-index: 997;"> -->
+    <img src="images/about/about4.jpg" alt="Image 4" class="drag-img" draggable="false"
+         style="left: 36px; top: 275px; width: 20vw; min-width: 264px; z-index: 996;">
+    <!-- <img src="images/about/about5.JPG" alt="Image 5" class="drag-img" draggable="false"
+         style="right: 18vw; top: 318px; width: 15vw; min-width: 190px; z-index: 995;"> -->
+  </div>
+
+  <!-- Drawing mode UI -->
+  <button class="draw-button">DRAW :)</button>
+  <div class="draw-overlay">
+    <div class="draw-images">
+      <img src="images/about/about1.jpeg" alt="Image 1" class="draw-img" style="right: 3vw; top: 269px; width: 14vw; min-width: 180px;">
+      <img src="images/about/about2.JPG" alt="Image 2" class="draw-img" style="right: calc(5vw - 20px); top: 568px; width: 17vw; min-width: 220px;">
+      <img src="images/about/about3.JPG" alt="Image 3" class="draw-img" style="right: 22vw; top: 488px; width: 16vw; min-width: 200px;">
+      <img src="images/about/about4.jpg" alt="Image 4" class="draw-img" style="left: 36px; top: 275px; width: 20vw; min-width: 264px;">
+      <img src="images/about/about5.JPG" alt="Image 5" class="draw-img" style="right: 18vw; top: 318px; width: 15vw; min-width: 190px;">
+    </div>
+    <canvas id="draw-canvas"></canvas>
+    <div class="color-palette">
+      <button class="color-swatch active" data-color="#FF46A2" style="background-color: #FF46A2;"></button>
+      <button class="color-swatch" data-color="#DFFF00" style="background-color: #DFFF00;"></button>
+      <button class="color-swatch eraser" data-color="eraser" title="Eraser"></button>
+      <button class="palette-btn undo-btn" title="Undo">↩</button>
+      <button class="palette-btn redo-btn" title="Redo">↪</button>
+    </div>
+    <button class="draw-send">SAVE & SEND</button>
+    <button class="draw-close">CLOSE</button>
+    <div class="name-popup">
+      <div class="name-popup-content">
+        <label for="drawer-name">Enter your name:</label>
+        <input type="text" id="drawer-name" placeholder="Your name">
+        <div class="name-popup-buttons">
+          <button class="name-cancel">Cancel</button>
+          <button class="name-submit">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer with nav -->
+  <footer>
+    <nav class="top-nav">
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="cv.pdf" target="_blank">CV</a>
+      <a href="index.html" class="footer-link">&copy; 2026 Sebastian Sanchez</a>
+    </nav>
+  </footer>
+
+  <script>
+    // Cursor echo effect
+    let lastEchoTime = 0;
+    const echoInterval = 25;
+
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastEchoTime < echoInterval) return;
+      lastEchoTime = now;
+
+      const dot = document.createElement('div');
+      dot.style.cssText = `
+        position: fixed;
+        left: ${e.clientX}px;
+        top: ${e.clientY}px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #FF46A2;
+        pointer-events: none;
+        z-index: 9998;
+        opacity: 0.5;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.15s ease-out;
+      `;
+
+      document.body.appendChild(dot);
+
+      setTimeout(() => {
+        dot.style.opacity = '0';
+        setTimeout(() => dot.remove(), 150);
+      }, 50);
+    });
+
+    var activeImg = null;
+    var startX, startY, imgX, imgY;
+    var topZ = 1000;
+
+    document.querySelectorAll('.drag-img').forEach(function(img) {
+      img.onmousedown = function(e) {
+        activeImg = img;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        // Convert right positioning to left if needed
+        if (img.style.right && !img.style.left) {
+          img.style.left = img.offsetLeft + 'px';
+          img.style.right = 'auto';
+        }
+
+        imgX = img.offsetLeft;
+        imgY = img.offsetTop;
+        img.style.cursor = 'grabbing';
+        img.style.zIndex = topZ++;
+      };
+    });
+
+    window.onmousemove = function(e) {
+      if (!activeImg) return;
+      var newX = imgX + e.clientX - startX;
+      var newY = imgY + e.clientY - startY;
+
+      // Keep image within viewport bounds
+      var maxX = window.innerWidth - activeImg.offsetWidth - 10;
+      var maxY = window.innerHeight - activeImg.offsetHeight - 10;
+      newX = Math.max(10, Math.min(newX, maxX));
+      newY = Math.max(10, Math.min(newY, maxY));
+
+      activeImg.style.left = newX + 'px';
+      activeImg.style.top = newY + 'px';
+    };
+
+    window.onmouseup = function() {
+      if (activeImg) {
+        activeImg.style.cursor = 'grab';
+        activeImg = null;
+      }
+    };
+
+    // Drawing mode
+    const drawButton = document.querySelector('.draw-button');
+    const drawOverlay = document.querySelector('.draw-overlay');
+    const drawCanvas = document.getElementById('draw-canvas');
+    const drawClose = document.querySelector('.draw-close');
+    const drawSend = document.querySelector('.draw-send');
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    const undoBtn = document.querySelector('.undo-btn');
+    const redoBtn = document.querySelector('.redo-btn');
+
+    if (drawButton && drawCanvas) {
+      const ctx = drawCanvas.getContext('2d');
+      let isDrawing = false;
+      let currentColor = '#FF46A2';
+      let isEraser = false;
+      let lastDrawX = 0;
+      let lastDrawY = 0;
+
+      // Undo/redo history
+      let history = [];
+      let historyIndex = -1;
+      const maxHistory = 50;
+
+      function saveState() {
+        history = history.slice(0, historyIndex + 1);
+        history.push(drawCanvas.toDataURL());
+        if (history.length > maxHistory) {
+          history.shift();
+        }
+        historyIndex = history.length - 1;
+      }
+
+      function undo() {
+        if (historyIndex > 0) {
+          historyIndex--;
+          const img = new Image();
+          img.onload = () => {
+            ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+            ctx.drawImage(img, 0, 0);
+          };
+          img.src = history[historyIndex];
+        } else if (historyIndex === 0) {
+          historyIndex = -1;
+          ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        }
+      }
+
+      function redo() {
+        if (historyIndex < history.length - 1) {
+          historyIndex++;
+          const img = new Image();
+          img.onload = () => {
+            ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+            ctx.drawImage(img, 0, 0);
+          };
+          img.src = history[historyIndex];
+        }
+      }
+
+      function resizeCanvas() {
+        drawCanvas.width = window.innerWidth;
+        drawCanvas.height = window.innerHeight;
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      // Open drawing mode
+      drawButton.addEventListener('click', () => {
+        drawOverlay.classList.add('active');
+        resizeCanvas();
+      });
+
+      // Close drawing mode
+      drawClose.addEventListener('click', () => {
+        drawOverlay.classList.remove('active');
+        ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        history = [];
+        historyIndex = -1;
+      });
+
+
+      // Color selection
+      colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', () => {
+          colorSwatches.forEach(s => s.classList.remove('active'));
+          swatch.classList.add('active');
+          if (swatch.dataset.color === 'eraser') {
+            isEraser = true;
+          } else {
+            isEraser = false;
+            currentColor = swatch.dataset.color;
+          }
+        });
+      });
+
+      // Undo/redo buttons
+      if (undoBtn) undoBtn.addEventListener('click', undo);
+      if (redoBtn) redoBtn.addEventListener('click', redo);
+
+      // Drawing functions
+      function startDrawing(e) {
+        isDrawing = true;
+        const rect = drawCanvas.getBoundingClientRect();
+        lastDrawX = e.clientX - rect.left;
+        lastDrawY = e.clientY - rect.top;
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+
+        const rect = drawCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        ctx.beginPath();
+        ctx.moveTo(lastDrawX, lastDrawY);
+        ctx.lineTo(x, y);
+
+        if (isEraser) {
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.lineWidth = 20;
+        } else {
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.strokeStyle = currentColor;
+          ctx.lineWidth = 8;
+        }
+
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        lastDrawX = x;
+        lastDrawY = y;
+      }
+
+      function stopDrawing() {
+        if (isDrawing) {
+          saveState();
+        }
+        isDrawing = false;
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      drawCanvas.addEventListener('mousedown', startDrawing);
+      drawCanvas.addEventListener('mousemove', draw);
+      drawCanvas.addEventListener('mouseup', stopDrawing);
+      drawCanvas.addEventListener('mouseout', stopDrawing);
+
+      drawCanvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        startDrawing({ clientX: touch.clientX, clientY: touch.clientY });
+      });
+
+      drawCanvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        draw({ clientX: touch.clientX, clientY: touch.clientY });
+      });
+
+      drawCanvas.addEventListener('touchend', stopDrawing);
+    }
+
+    // Name popup and send functionality
+    (function() {
+      var sendBtn = document.querySelector('.draw-send');
+      var popup = document.querySelector('.name-popup');
+      var input = document.querySelector('#drawer-name');
+      var cancelBtn = document.querySelector('.name-cancel');
+      var submitBtn = document.querySelector('.name-submit');
+      var canvas = document.getElementById('draw-canvas');
+
+      if (!sendBtn || !popup || !canvas) return;
+
+      sendBtn.onclick = function() {
+        popup.classList.add('active');
+        input.value = '';
+        input.focus();
+      };
+
+      cancelBtn.onclick = function() {
+        popup.classList.remove('active');
+      };
+
+      submitBtn.onclick = function() {
+        doSend();
+      };
+
+      input.onkeydown = function(e) {
+        if (e.key === 'Enter') doSend();
+      };
+
+      function doSend() {
+        var userName = input.value.trim() || 'Anonymous';
+        popup.classList.remove('active');
+
+        var temp = document.createElement('canvas');
+        temp.width = canvas.width;
+        temp.height = canvas.height;
+        var tctx = temp.getContext('2d');
+
+        // Background
+        tctx.fillStyle = '#F0EEE9';
+        tctx.fillRect(0, 0, temp.width, temp.height);
+
+        // Drawing on top
+        tctx.drawImage(canvas, 0, 0);
+
+        // Name
+        tctx.font = '500 24px "Geist Sans", -apple-system, sans-serif';
+        tctx.fillStyle = '#222';
+        tctx.textAlign = 'right';
+        tctx.fillText(userName, temp.width - 40, temp.height - 40);
+
+        // Download
+        var dataURL = temp.toDataURL('image/png');
+        var a = document.createElement('a');
+        a.href = dataURL;
+        a.download = 'drawing-for-seb.png';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Email
+        var subj = encodeURIComponent('my drawing!');
+        var body = encodeURIComponent('i made this for you :)\n\n-' + userName);
+        window.open('mailto:sebfsanchez@gmail.com?subject=' + subj + '&body=' + body);
+      }
+    })();
+  </script>
+</body>
+</html>
