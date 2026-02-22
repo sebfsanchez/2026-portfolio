@@ -12,9 +12,10 @@
   <!-- Top nav -->
   <header>
     <nav class="top-nav">
+      <a href="index.html">Home</a>
       <a href="about.html">About</a>
-      <a href="projects.html">Projects</a>
-      <a href="cv.pdf" target="_blank">CV</a>
+      <a href="work.html">Work</a>
+      <a href="writings.html">Teaching & Talks</a>
     </nav>
   </header>
 
@@ -36,7 +37,7 @@
     <!-- Hidden image sources for scattering -->
     <div id="image-sources" style="display: none;">
       <img src="images/homepage/slide2.png" alt="Image 2">
-      <img src="images/homepage/slide3.JPG" alt="Image 3">
+      <!-- <img src="images/homepage/slide3.JPG" alt="Image 3"> -->
       <img src="images/homepage/slide4.JPG" alt="Image 4">
       <img src="images/homepage/slide5.jpg" alt="Image 5">
       <img src="images/homepage/slide6.JPG" alt="Image 6">
@@ -64,11 +65,19 @@
   <div class="draw-overlay">
     <canvas id="draw-canvas"></canvas>
     <div class="color-palette">
-      <button class="color-swatch active" data-color="#FF46A2" style="background-color: #FF46A2;"></button>
-      <button class="color-swatch" data-color="#DFFF00" style="background-color: #DFFF00;"></button>
-      <button class="color-swatch eraser" data-color="eraser" title="Eraser"></button>
-      <button class="palette-btn undo-btn" title="Undo">↩</button>
-      <button class="palette-btn redo-btn" title="Redo">↪</button>
+      <div class="palette-row">
+        <button class="color-swatch active" data-color="#FF46A2" style="background-color: #FF46A2;"></button>
+        <button class="color-swatch" data-color="#DFFF00" style="background-color: #DFFF00;"></button>
+        <button class="color-swatch eraser" data-color="eraser" title="Eraser">⊘</button>
+      </div>
+      <div class="palette-row eraser-row">
+        <span class="eraser-label">Eraser</span>
+        <input type="range" class="eraser-slider" id="eraser-slider" min="5" max="80" value="20">
+      </div>
+      <div class="palette-row">
+        <button class="palette-btn undo-btn" title="Undo">&#8592;</button>
+        <button class="palette-btn redo-btn" title="Redo">&#8594;</button>
+      </div>
     </div>
     <button class="draw-send">SAVE & SEND</button>
     <button class="draw-close">CLOSE</button>

@@ -202,12 +202,14 @@ const drawSend = document.querySelector('.draw-send');
 const colorSwatches = document.querySelectorAll('.color-swatch');
 const undoBtn = document.querySelector('.undo-btn');
 const redoBtn = document.querySelector('.redo-btn');
+const eraserSlider = document.getElementById('eraser-slider');
 
 if (drawButton && drawCanvas) {
   const ctx = drawCanvas.getContext('2d');
   let isDrawing = false;
   let currentColor = '#FF46A2';
   let isEraser = false;
+  let eraserSize = 20;
   let lastX = 0;
   let lastY = 0;
 
@@ -283,15 +285,18 @@ if (drawButton && drawCanvas) {
 
 
   // Color selection
+  const eraserRow = document.querySelector('.eraser-row');
   colorSwatches.forEach(swatch => {
     swatch.addEventListener('click', () => {
       colorSwatches.forEach(s => s.classList.remove('active'));
       swatch.classList.add('active');
       if (swatch.dataset.color === 'eraser') {
         isEraser = true;
+        if (eraserRow) eraserRow.classList.add('active');
       } else {
         isEraser = false;
         currentColor = swatch.dataset.color;
+        if (eraserRow) eraserRow.classList.remove('active');
       }
     });
   });
@@ -302,6 +307,13 @@ if (drawButton && drawCanvas) {
   }
   if (redoBtn) {
     redoBtn.addEventListener('click', redo);
+  }
+
+  // Eraser slider
+  if (eraserSlider) {
+    eraserSlider.addEventListener('input', (e) => {
+      eraserSize = parseInt(e.target.value);
+    });
   }
 
   // Drawing functions
@@ -325,7 +337,7 @@ if (drawButton && drawCanvas) {
 
     if (isEraser) {
       ctx.globalCompositeOperation = 'destination-out';
-      ctx.lineWidth = 20;
+      ctx.lineWidth = eraserSize;
     } else {
       ctx.globalCompositeOperation = 'source-over';
       ctx.strokeStyle = currentColor;

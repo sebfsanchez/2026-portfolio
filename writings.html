@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teaching & Talks | Sebastian Sanchez</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
+  <style>
+    /* Override body styles for this page */
+    html, body {
+      overflow: auto !important;
+      height: auto !important;
+      min-height: 100vh;
+    }
+
+    /* Grid layout - 4 columns spanning full width */
+    .writings-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 2rem 2rem 6rem;
+    }
+
+    .writings-column {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      width: 20%;
+    }
+
+    .writings-section {
+      margin: 0;
+    }
+
+    .writings-section h3 {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .writings-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .writings-section li {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .writings-section li a {
+      font-size: 14px;
+      font-weight: 400;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: background-color 0.2s ease;
+      padding: 0.15rem 0.3rem;
+      margin-left: -0.3rem;
+      display: inline;
+    }
+
+    .writings-section li a:hover {
+      background-color: #DFFF00;
+    }
+
+    .writings-section .meta {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      display: block;
+      margin-top: 0.1rem;
+    }
+
+    /* Footer positioning */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background-color: var(--color-bg);
+    }
+
+    /* Mobile */
+    @media (max-width: 1200px) {
+      .writings-container {
+        flex-wrap: wrap;
+      }
+      .writings-column {
+        width: 45%;
+        margin-bottom: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .writings-container {
+        flex-direction: column;
+        padding: 1.5rem 1.5rem 5rem;
+      }
+      .writings-column {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="writings-container">
+
+    <!-- Column 1: Teaching + Educational Lectures -->
+    <div class="writings-column">
+      <div class="writings-section">
+        <h3>Teaching</h3>
+        <ul>
+          <li>
+            Understanding the Digital Art Ecosystem<br>
+            Columbia University, Teacher's College
+            <span class="meta">Arts Administration Graduate Program</span>
+            <span class="meta">Terms: 2024, 2025</span>
+          </li>
+        </ul>
+      </div>
+      <div class="writings-section">
+        <h3>Educational Lectures</h3>
+        <ul>
+          <li>
+            The Evolution of Collecting: Digital Ownership
+            <span class="meta">Signal on Sale, Seoul, Korea</span>
+          </li>
+          <li>
+            Navigating the Digital Art Market: Christie's Journey and Future
+            <span class="meta">Teachers College, Columbia University, April 2024</span>
+          </li>
+          <li>
+            Guest Art Critic
+            <span class="meta">NYU Interactive Telecommunications Program, April 2024</span>
+          </li>
+          <li>
+            AI in Art Lecture Series
+            <span class="meta">Niagara University & Castellani Art Museum, April 2024</span>
+          </li>
+          <li>
+            The Business of Digital Art
+            <span class="meta">Christie's Education, March 2024</span>
+          </li>
+          <li>
+            Auction Houses and Art Institutions as Key Players in Web3
+            <span class="meta">Christie's Education, November 2023</span>
+          </li>
+          <li>
+            What is a Digital Art Specialist?
+            <span class="meta">Parsons School of Design, October 2023</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 2: Selected Publications -->
+    <div class="writings-column">
+      <div class="writings-section">
+        <h3>Selected Publications</h3>
+        <ul>
+          <li>
+            <a href="https://www.nytimes.com/athletic/6509309/2025/07/22/lionel-messi-refik-anadol-artwork-christies/" target="_blank">Digital artwork of Lionel Messi's favorite goal sold for $1.87M to mystery buyer</a>
+            <span class="meta">NYTimes</span>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/watch?v=11NV5fyLGh0" target="_blank">Live Messi's favorite goal: An immersive AI art installation auctioned for charity</a>
+            <span class="meta">Associated Press</span>
+          </li>
+          <li>
+            <a href="https://www.christies.com/en/stories/what-is-ai-art-augmented-intelligence-36dc0897d3584268b5102468a3bf8a8c" target="_blank">What is AI Art</a>
+            <span class="meta">Christie's Magazine</span>
+          </li>
+          <li>
+            <a href="https://www.vogue.com/article/new-gucci-nfts-combine-fashion-and-art-using-generative-ai" target="_blank">New Gucci NFTs combine fashion and art using generative AI</a>
+            <span class="meta">Vogue Business</span>
+          </li>
+          <li>
+            <a href="https://www.coindesk.com/web3/2023/05/19/beyond-the-jpeg-web3-is-expanding-the-artists-canvas-through-immersive-irl-experiences" target="_blank">Beyond the JPEG: Web3 Is Expanding the Artist's Canvas</a>
+            <span class="meta">CoinDesk</span>
+          </li>
+          <li>
+            <a href="https://www.theartnewspaper.com/2024/10/11/from-ordinals-to-ownership-christies-explores-new-frontiers-of-blockchain-based-provenance" target="_blank">From ordinals to ownership: Christie's explores new frontiers of blockchain-based provenance</a>
+            <span class="meta">The Art Newspaper</span>
+          </li>
+          <li>
+            <a href="https://news.artnet.com/market/christies-is-still-betting-on-nfts-preps-sale-with-pioneering-artist-robert-alice-2440184" target="_blank">Christie's Is Still Betting on NFTs</a>
+            <span class="meta">Art News</span>
+          </li>
+          <li>
+            <a href="https://decrypt.co/148628?p=148628" target="_blank">Gucci's Iconic Fashion Is Reimagined in Christie's NFT Art Auction</a>
+            <span class="meta">Decrypt</span>
+          </li>
+          <li>
+            <a href="https://wwd.com/fashion-news/designer-luxury/christies-gucci-explore-generative-art-fashion-1235743907/" target="_blank">Christie's, Gucci Explore Generative Art and Fashion</a>
+            <span class="meta">WWD</span>
+          </li>
+          <li>
+            <a href="https://nftnow.com/the-gateway/digital-art-takes-center-stage-jack-butcher-and-ac-the-collector-share-perspectives-at-christies-panel/" target="_blank">Digital Art Takes Center Stage: Collector Perspectives at Christie's</a>
+            <span class="meta">NFT Now</span>
+          </li>
+          <li>
+            <a href="https://www.christies.com/en/stories/art-and-luxury-trends-2024-d22cbce42dd047c9b3120e38d321999d" target="_blank">Specialists Speak: The Art and Luxury Trends on Our Radar in 2024</a>
+            <span class="meta">Christie's Magazine</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 3: Conferences and Panels -->
+    <div class="writings-column">
+      <div class="writings-section">
+        <h3>Conferences & Panels</h3>
+        <ul>
+          <li>
+            From Canvas to Code
+            <span class="meta">Harvard Blockchain Conference, Panelist</span>
+          </li>
+          <li>
+            Web3 Collectors Salon
+            <span class="meta">Artists Rights Society, New York, Panelist</span>
+          </li>
+          <li>
+            Generative Art Today
+            <span class="meta">Proof of People Conference, Panelist</span>
+          </li>
+          <li>
+            The Future of Art in the Digital/Physical Convergence
+            <span class="meta">ArtMat, Panelist</span>
+          </li>
+          <li>
+            Keith Haring: Pixel Pioneer
+            <span class="meta">Station3 NYC, Panelist</span>
+          </li>
+          <li>
+            Artist, Collector, Specialist
+            <span class="meta">The Gateway Miami, Moderator</span>
+          </li>
+          <li>
+            Launch of SOURCE [On NFTs] x TASCHEN
+            <span class="meta">Christie's, New York, Panelist</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 4: Podcasts -->
+    <div class="writings-column">
+      <div class="writings-section">
+        <h3>Podcasts</h3>
+        <ul>
+          <li>
+            <a href="https://open.spotify.com/episode/2iBKN7FUXCNVPJQVFrubyv?si=UDuoDXSeQpGT-3C-TQOHhA" target="_blank">Digital Art Post Boom</a>
+            <span class="meta">Le Random</span>
+          </li>
+          <li>
+            <a href="https://open.spotify.com/episode/4fDl7oFLNfNcLdct6GwZnb" target="_blank">Future Frequencies: Digital Artworks with Claire Silver & Emi Kusano</a>
+            <span class="meta">Gucci Podcast</span>
+          </li>
+          <li>
+            <a href="https://open.spotify.com/episode/75PaJ2AJRRJqORNbFwMr1o" target="_blank">Future Frequencies: DAOs & the Artist Botto</a>
+            <span class="meta">Gucci Podcast</span>
+          </li>
+          <li>
+            <a href="https://podcasts.apple.com/us/podcast/a-comprehensive-guide-to-digital-art-with/id1688280011?i=1000637744078" target="_blank">A Comprehensive Guide to Digital Art</a>
+            <span class="meta">Context by Boys Club</span>
+          </li>
+          <li>
+            CODE IS THE COUTURE – Episode 002
+            <span class="meta">CODE IS THE COUTURE</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer with nav -->
+  <footer>
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="work.html">Work</a>
+      <a href="writings.html">Teaching & Talks</a>
+      <a href="index.html" class="footer-link">&copy; 2026 Sebastian Sanchez</a>
+    </nav>
+  </footer>
+
+  </body>
+</html>
