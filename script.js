@@ -436,13 +436,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Download
     var dataURL = temp.toDataURL('image/png');
-    var a = document.createElement('a');
-    a.href = dataURL;
-    a.download = 'drawing-for-seb.png';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // On mobile, open image in new tab for long-press save
+      var newTab = window.open();
+      newTab.document.write('<html><head><title>Save your drawing</title><meta name="viewport" content="width=device-width, initial-scale=1"></head><body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#F0EEE9;"><div style="text-align:center;padding:20px;"><p style="font-family:sans-serif;margin-bottom:20px;">Long press the image to save it</p><img src="' + dataURL + '" style="max-width:90vw;max-height:70vh;"></div></body></html>');
+    } else {
+      var a = document.createElement('a');
+      a.href = dataURL;
+      a.download = 'drawing-for-seb.png';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
 
     // Email
     var subj = encodeURIComponent('my drawing!');
