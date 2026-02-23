@@ -154,6 +154,24 @@
       z-index: 500;
     }
 
+    .back-to-work {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text);
+      text-decoration: none;
+      z-index: 100;
+      transition: color 0.2s ease;
+    }
+
+    .back-to-work:hover {
+      color: #FF46A2;
+    }
+
     .carousel-nav button {
       background: var(--color-bg);
       border: 2px solid var(--color-text);
@@ -337,6 +355,7 @@
     </div>
   </div>
 
+  <a href="work.html" class="back-to-work">← Work</a>
   <div class="carousel-nav">
     <button class="carousel-prev">←</button>
     <button class="carousel-next">→</button>
