@@ -75,7 +75,7 @@
   <a href="work.html" class="back-to-work">← Work</a>
   <div class="carousel-nav"><button class="carousel-prev">←</button><button class="carousel-next">→</button></div>
   <div class="lightbox" id="lightbox"><button class="lightbox-arrow lightbox-prev">&larr;</button><img src="" alt="Enlarged image"><button class="lightbox-arrow lightbox-next">&rarr;</button></div>
-  <footer><nav class="top-nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="work.html">Work</a><a href="writings.html">Teaching & Talks</a><a href="index.html" class="footer-link">&copy; 2026 Sebastian Sanchez</a></nav></footer>
+  <footer><nav class="top-nav"><a href="/">Home</a><a href="about.html">About</a><a href="work.html">Work</a><a href="writings.html">Teaching & Talks</a><a href="/" class="footer-link">&copy; 2026 Sebastian Sanchez</a></nav></footer>
   <script>
     let lastEchoTime = 0;
     document.addEventListener('mousemove', (e) => { const now = Date.now(); if (now - lastEchoTime < 25) return; lastEchoTime = now; const dot = document.createElement('div'); dot.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:20px;height:20px;border-radius:50%;background-color:#FF46A2;pointer-events:none;z-index:9998;opacity:0.5;transform:translate(-50%,-50%);transition:opacity 0.15s ease-out;`; document.body.appendChild(dot); setTimeout(() => { dot.style.opacity = '0'; setTimeout(() => dot.remove(), 150); }, 50); });
