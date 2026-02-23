@@ -267,7 +267,16 @@ footer .footer-link:hover {
   }
 
   footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 1rem 1.5rem;
+    background-color: var(--color-bg);
+  }
+
+  .draw-button {
+    bottom: 4rem;
   }
 
   .footer-nav {
@@ -305,11 +314,13 @@ footer .footer-link:hover {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: transparent;
+  color: var(--color-text);
+  background: var(--color-bg);
   border: none;
   padding: 0.5rem 0.75rem;
   z-index: 200;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .draw-button:hover {

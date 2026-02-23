@@ -475,6 +475,19 @@
       cameraZ += e.deltaY * 3;
     }, { passive: true });
 
+    // Touch support for mobile
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchY;
+      cameraZ += deltaY * 5;
+      touchStartY = touchY;
+    }, { passive: true });
+
     // Animation loop
     function animate() {
       tunnelImages.forEach(item => {
