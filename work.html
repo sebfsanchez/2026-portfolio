@@ -7,48 +7,35 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
   <style>
-    /* Override body styles for this page */
     html, body {
-      overflow-x: auto !important;
-      overflow-y: hidden !important;
+      overflow: hidden !important;
       height: 100vh !important;
     }
 
-    /* Projects layout */
-    .projects-container {
-      display: flex;
-      gap: 4rem;
-      padding: 2rem 3rem;
-      max-width: 1400px;
-      min-height: calc(100vh - 100px);
-    }
-
-    /* Left side - project list */
+    /* Project list overlay */
     .projects-list {
-      flex: 0 0 auto;
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      z-index: 100;
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
-      padding-top: 0.5rem;
     }
 
     .project-item {
       display: flex;
       align-items: baseline;
       gap: 1rem;
+      text-decoration: none;
       transition: background-color 0.2s ease;
       padding: 0.25rem 0.5rem;
       margin-left: -0.5rem;
       width: fit-content;
-      position: relative;
     }
 
     .project-item:hover {
       background-color: #DFFF00;
-    }
-
-    .project-skills {
-      display: none;
     }
 
     .project-number {
@@ -64,242 +51,180 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-text);
-      text-decoration: none;
     }
 
-    .project-name:hover {
-      text-decoration: none;
-    }
-
-    /* Right side - description and images */
-    .projects-right {
-      flex: 1;
-      position: relative;
-    }
-
-    /* Project description popup */
-    .project-description {
+    /* Tunnel container */
+    .tunnel-container {
       position: fixed;
-      left: 50px;
-      bottom: 100px;
-      font-size: 13px;
-      line-height: 1.5;
-      color: var(--color-text);
-      background-color: var(--color-bg);
-      border: 2px solid var(--color-text);
-      padding: 1rem 1.25rem;
-      max-width: 300px;
-      opacity: 0;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
       pointer-events: none;
-      z-index: 500;
-      cursor: grab;
     }
 
-    .project-description.active {
-      opacity: 1;
-      pointer-events: auto;
-      animation: shake 0.4s ease;
+    .tunnel-scene {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
 
-    .project-description.dragging {
-      cursor: grabbing;
-    }
-
-    .project-description .drag-hint {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 0.5rem;
-      opacity: 0.6;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: rotate(0deg); }
-      20% { transform: rotate(-2deg); }
-      40% { transform: rotate(2deg); }
-      60% { transform: rotate(-1deg); }
-      80% { transform: rotate(1deg); }
-    }
-
-    /* Hover images container */
-    .project-images {
-      position: fixed;
+    .tunnel-image {
+      position: absolute;
+      left: 50%;
       top: 50%;
-      transform: translateY(-50%);
-      left: 320px;
-      right: 0;
-      display: none;
-      flex-wrap: nowrap;
-      gap: 40px;
+      will-change: transform, opacity;
+      cursor: pointer;
       pointer-events: auto;
-      padding-right: 60px;
-      align-items: flex-start;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      transform-origin: center center;
     }
 
-    .project-images::-webkit-scrollbar {
-      display: none;
-    }
-
-    .project-images.active {
-      cursor: grab;
-    }
-
-    .project-images.dragging {
-      cursor: grabbing;
-    }
-
-    .project-images.active {
-      display: flex;
-    }
-
-    .project-images img {
-      height: 70vh;
+    .tunnel-image img {
       width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: auto;
+      display: block;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transition: box-shadow 0.2s ease;
     }
 
-    .project-images.active img {
-      opacity: 1;
+    .tunnel-image:hover img {
+      box-shadow: 0 0 40px rgba(255, 70, 162, 0.6);
     }
 
-    .project-images.active img:hover {
-      opacity: 0.8;
-    }
-
-    .image-wrapper {
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .image-caption {
-      font-size: 12px;
-      color: var(--color-text-muted);
-      margin-top: 0.5rem;
-      max-width: 300px;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    .image-wrapper:hover .image-caption {
-      opacity: 1;
-    }
-
-    /* Lightbox overlay */
+    /* Lightbox */
     .lightbox {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
       z-index: 10000;
-      pointer-events: none;
-      transition: background 0.3s ease;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .lightbox.active {
-      background: rgba(0, 0, 0, 0.9);
-      pointer-events: auto;
+      display: flex;
+      opacity: 1;
     }
 
     .lightbox img {
-      max-width: 90vw;
-      max-height: 90vh;
+      max-width: 80vw;
+      max-height: 70vh;
       object-fit: contain;
-      transform: scale(0.3);
-      opacity: 0;
-      transition: transform 0.4s ease, opacity 0.3s ease;
+      box-shadow: 0 0 60px rgba(0,0,0,0.5);
     }
 
-    .lightbox.active img {
-      transform: scale(1);
-      opacity: 1;
+    .lightbox-caption {
+      margin-top: 1.5rem;
+      text-align: center;
     }
 
-    .lightbox-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #FF46A2;
-      font-size: 3rem;
-      font-weight: bold;
-      padding: 1rem;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      z-index: 10001;
+    .lightbox-title {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      margin-bottom: 1rem;
     }
 
-    .lightbox.active .lightbox-arrow {
-      opacity: 0.85;
-    }
-
-    .lightbox.active .lightbox-arrow:hover {
-      opacity: 1;
-    }
-
-    .lightbox-prev {
-      left: 2rem;
-    }
-
-    .lightbox-next {
-      right: 2rem;
-    }
-
-    @media (max-width: 900px) {
-      .lightbox-arrow {
-        display: none;
-      }
-    }
-
-    /* Carousel navigation arrows */
-    .carousel-nav {
-      position: fixed;
-      bottom: 5rem;
-      right: 2rem;
-      display: none;
-      gap: 0.5rem;
-      z-index: 500;
-    }
-
-    .carousel-nav.active {
-      display: flex;
-    }
-
-    .carousel-nav button {
-      background: var(--color-bg);
-      border: 2px solid var(--color-text);
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .lightbox-link {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-bg);
+      background: #FF46A2;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
       transition: background-color 0.2s ease;
+    }
+
+    .lightbox-link:hover {
+      background: #DFFF00;
       color: var(--color-text);
     }
 
-    .carousel-nav button:hover {
-      background-color: #DFFF00;
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-size: 24px;
+      color: #fff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
     }
 
-    @media (max-width: 900px) {
-      .carousel-nav {
-        display: none !important;
-      }
+    .lightbox-close:hover {
+      opacity: 1;
+    }
+
+    /* Project label on hover */
+    .tunnel-image .project-label {
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text);
+      background: var(--color-bg);
+      padding: 0.25rem 0.5rem;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .tunnel-image:hover .project-label {
+      opacity: 1;
+    }
+
+    /* Floating title in tunnel */
+    .tunnel-title {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      will-change: transform, opacity;
+      pointer-events: auto;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transform-origin: center center;
+    }
+
+    .tunnel-title span {
+      font-size: 24px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text);
+      background: var(--color-bg);
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--color-text);
+      display: block;
+      transition: all 0.2s ease;
+    }
+
+    .tunnel-title:hover span {
+      background: #FF46A2;
+      border-color: #FF46A2;
+      color: var(--color-bg);
     }
 
     /* Footer positioning */
@@ -313,229 +238,55 @@
     }
 
     /* Mobile */
-    @media (max-width: 900px) {
-      html, body {
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        height: auto !important;
-      }
-
-      .projects-container {
-        flex-direction: column;
-        padding: 1.5rem;
-        gap: 1.5rem;
-      }
-
+    @media (max-width: 768px) {
       .projects-list {
-        gap: 0.8rem;
-        position: relative;
-        z-index: 100;
+        top: 1rem;
+        left: 1rem;
       }
 
-      .project-description {
-        position: relative !important;
-        left: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-        top: auto !important;
-        max-width: 100%;
-        margin: 1rem 0;
-        z-index: 100;
-      }
-
-      .project-images {
-        position: relative;
-        top: auto;
-        left: auto;
-        right: auto;
-        transform: none;
-        flex-direction: column;
-        padding: 1rem;
-        padding-bottom: 100px;
-        overflow: visible;
-        gap: 20px;
-      }
-
-      .project-images img {
-        height: auto;
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .image-wrapper {
-        width: 100%;
-      }
-
-      .image-caption {
-        opacity: 1;
-        max-width: 100%;
-      }
-
-      footer {
-        position: fixed;
+      .project-number,
+      .project-name {
+        font-size: 13px;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="projects-container">
-    <!-- Left side - Project list -->
-    <div class="projects-list">
-      <a href="project-augmented-intelligence.html" class="project-item" data-project="augmented" data-skills="Curation, Sales, Exhibition Design, Planning, Production">
-        <span class="project-number">[01]</span>
-        <span class="project-name">Augmented Intelligence</span>
-      </a>
-      <a href="project-goal-in-life.html" class="project-item" data-project="goal" data-skills="A Goal in Life">
-        <span class="project-number">[02]</span>
-        <span class="project-name">A Goal in Life</span>
-      </a>
-      <a href="project-on-nfts.html" class="project-item" data-project="nfts" data-skills="On NFTs">
-        <span class="project-number">[03]</span>
-        <span class="project-name">On NFTs</span>
-      </a>
-      <a href="project-keith-haring.html" class="project-item" data-project="keith" data-skills="Keith Haring Amiga">
-        <span class="project-number">[04]</span>
-        <span class="project-name">Keith Haring Amiga</span>
-      </a>
+  <!-- Project list overlay -->
+  <div class="projects-list">
+    <a href="project-augmented-intelligence.html" class="project-item">
+      <span class="project-number">[01]</span>
+      <span class="project-name">Augmented Intelligence</span>
+    </a>
+    <a href="project-goal-in-life.html" class="project-item">
+      <span class="project-number">[02]</span>
+      <span class="project-name">A Goal in Life</span>
+    </a>
+    <a href="project-on-nfts.html" class="project-item">
+      <span class="project-number">[03]</span>
+      <span class="project-name">On NFTs</span>
+    </a>
+    <a href="project-keith-haring.html" class="project-item">
+      <span class="project-number">[04]</span>
+      <span class="project-name">Keith Haring Amiga</span>
+    </a>
+  </div>
 
-      </div>
+  <div class="tunnel-container">
+    <div class="tunnel-scene" id="tunnel-scene"></div>
+  </div>
 
-    <!-- Right side - Images area -->
-    <div class="projects-right">
-      <div class="project-images" data-project="augmented" data-description="Augmented Intelligence was Christie's first-ever auction dedicated entirely to art created with artificial intelligence — and the first AI-focused sale by any major auction house. The sale brought together pioneering artists working with AI including Holly Herndon & Mat Dryhurst, Refik Anadol, Sasha Stiles, and Harold Cohen, totaling over $800,000.">
-        <div class="image-wrapper">
-          <img src="images/augmented-intelligence/augmented1.jpg" alt="Augmented Intelligence 1">
-          <span class="image-caption">Install shot, Embedding Study 1 & 2 (from xhairymutantx) by Holly Herndon & Mat Dryhurst</span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/augmented-intelligence/augmented2.png" alt="Augmented Intelligence 2">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/augmented-intelligence/augmented3.png" alt="Augmented Intelligence 3">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/augmented-intelligence/augmented4.png" alt="Augmented Intelligence 4">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/augmented-intelligence/augmented5.png" alt="Augmented Intelligence 5">
-          <span class="image-caption"></span>
-        </div>
-      </div>
-      <div class="project-images" data-project="goal" data-description="A Goal in Life: Leo Messi x Refik Anadol was a groundbreaking collaboration that transformed Messi's favorite career goal into an immersive AI artwork. The piece sold for $1.87 million at Christie's, with proceeds benefiting charity.">
-        <div class="image-wrapper">
-          <img src="images/goal-in-life/goal1.jpg" alt="A Goal in Life 1">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/goal-in-life/goal2.png" alt="A Goal in Life 2">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/goal-in-life/goal3.avif" alt="A Goal in Life 3">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/goal-in-life/goal4.png" alt="A Goal in Life 4">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/goal-in-life/goal5.png" alt="A Goal in Life 5">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/goal-in-life/goal6.png" alt="A Goal in Life 6">
-          <span class="image-caption"></span>
-        </div>
-      </div>
-      <div class="project-images" data-project="nfts" data-description="On NFTs was a collaborative exhibition and publication with TASCHEN exploring the history and cultural significance of NFTs and digital art. The project brought together leading voices in the space to examine the movement's impact on art and collecting. The US launch of the book was held at Christie's, coinciding with a generative drop by Robert Alice through Christie's 3.0 — marking the first time in the auction house's history that it conducted a Dutch auction with generative minting on-chain.">
-        <div class="image-wrapper">
-          <img src="images/on-nfts/nfts1.jpg" alt="On NFTs 1">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/on-nfts/nfts2.png" alt="On NFTs 2">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/on-nfts/nfts3.png" alt="On NFTs 3">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/on-nfts/nfts4.png" alt="On NFTs 4">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/on-nfts/nfts5.png" alt="On NFTs 5">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/on-nfts/nfts6.png" alt="On NFTs 6">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/on-nfts/nfts7.png" alt="On NFTs 7">
-          <span class="image-caption"></span>
-        </div>
-      </div>
-      <div class="project-images" data-project="keith" data-description="Keith Haring: Pixel Pioneer explored Haring's pioneering digital work, including his early experiments with computers and his lasting influence on digital art. The exhibition highlighted the artist's forward-thinking approach to technology and creativity.">
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring1.png" alt="Keith Haring 1">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring01.png" alt="Keith Haring 01">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring2.png" alt="Keith Haring 2">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring002.png" alt="Keith Haring 002">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring3.png" alt="Keith Haring 3">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring03.png" alt="Keith Haring 03">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring4.png" alt="Keith Haring 4">
-          <span class="image-caption"></span>
-        </div>
-        <div class="image-wrapper">
-          <img src="images/keith-haring/haring5.png" alt="Keith Haring 5">
-          <span class="image-caption"></span>
-        </div>
-      </div>
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close">&times;</button>
+    <img src="" alt="">
+    <div class="lightbox-caption">
+      <div class="lightbox-title"></div>
+      <a href="" class="lightbox-link">View Project →</a>
     </div>
   </div>
 
-  <!-- Project description popup -->
-  <div class="project-description" id="project-description">
-    <span class="drag-hint">&#128302;</span>
-    <span class="description-text"></span>
-  </div>
-
-  <!-- Lightbox for enlarged images -->
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-arrow lightbox-prev">&larr;</button>
-    <img src="" alt="Enlarged image">
-    <button class="lightbox-arrow lightbox-next">&rarr;</button>
-  </div>
-
-  <!-- Carousel navigation arrows -->
-  <div class="carousel-nav" id="carousel-nav">
-    <button class="carousel-prev">←</button>
-    <button class="carousel-next">→</button>
-  </div>
 
   <!-- Footer with nav -->
   <footer>
@@ -549,6 +300,261 @@
   </footer>
 
   <script>
+    // Project data with images
+    const projects = [
+      {
+        id: 'augmented',
+        name: 'Augmented Intelligence',
+        url: 'project-augmented-intelligence.html',
+        images: [
+          'images/augmented-intelligence/augmented1.jpg',
+          'images/augmented-intelligence/augmented2.png',
+          'images/augmented-intelligence/augmented3.png',
+          'images/augmented-intelligence/augmented4.png',
+          'images/augmented-intelligence/augmented5.png'
+        ]
+      },
+      {
+        id: 'goal',
+        name: 'A Goal in Life',
+        url: 'project-goal-in-life.html',
+        images: [
+          'images/goal-in-life/goal1.jpg',
+          'images/goal-in-life/goal2.png',
+          'images/goal-in-life/goal3.avif',
+          'images/goal-in-life/goal4.png',
+          'images/goal-in-life/goal5.png',
+          'images/goal-in-life/goal6.png'
+        ]
+      },
+      {
+        id: 'nfts',
+        name: 'On NFTs',
+        url: 'project-on-nfts.html',
+        images: [
+          'images/on-nfts/nfts1.jpg',
+          'images/on-nfts/nfts2.png',
+          'images/on-nfts/nfts3.png',
+          'images/on-nfts/nfts4.png',
+          'images/on-nfts/nfts5.png',
+          'images/on-nfts/nfts6.png',
+          'images/on-nfts/nfts7.png'
+        ]
+      },
+      {
+        id: 'keith',
+        name: 'Keith Haring Amiga',
+        url: 'project-keith-haring.html',
+        images: [
+          'images/keith-haring/haring1.png',
+          'images/keith-haring/haring01.png',
+          'images/keith-haring/haring2.png',
+          'images/keith-haring/haring002.png',
+          'images/keith-haring/haring3.png',
+          'images/keith-haring/haring03.png',
+          'images/keith-haring/haring4.png',
+          'images/keith-haring/haring5.png'
+        ]
+      }
+    ];
+
+    const scene = document.getElementById('tunnel-scene');
+    const tunnelImages = [];
+
+    // Tunnel parameters
+    const minZ = -2000;
+    const maxZ = 200;
+    let cameraZ = 0; // Camera position in Z space
+
+    // Create all tunnel images with golden angle distribution
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // ~137.5 degrees
+    let imageIndex = 0;
+
+    projects.forEach(project => {
+      project.images.forEach(imgSrc => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'tunnel-image';
+        wrapper.dataset.project = project.id;
+        wrapper.dataset.url = project.url;
+        wrapper.dataset.name = project.name;
+
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.alt = project.name;
+
+        const label = document.createElement('span');
+        label.className = 'project-label';
+        label.textContent = project.name;
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(label);
+        scene.appendChild(wrapper);
+
+        // Varied image sizes
+        const size = 180 + Math.random() * 200;
+        // Spread across entire viewport
+        const angle = imageIndex * goldenAngle + Math.random() * 0.5;
+        const radius = 400 + Math.random() * 600;
+        tunnelImages.push({
+          el: wrapper,
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * radius,
+          z: minZ + Math.random() * (maxZ - minZ),
+          width: size,
+          height: size * (0.65 + Math.random() * 0.35)
+        });
+        imageIndex++;
+      });
+    });
+
+    // Create floating titles for each project
+    const tunnelTitles = [];
+    projects.forEach((project, index) => {
+      const titleEl = document.createElement('a');
+      titleEl.className = 'tunnel-title';
+      titleEl.href = project.url;
+
+      const span = document.createElement('span');
+      span.textContent = project.name;
+      titleEl.appendChild(span);
+      scene.appendChild(titleEl);
+
+      // Position titles with good spread
+      const angle = (index * 2.5) * goldenAngle + Math.PI / 4;
+      const radius = 450 + index * 120;
+      tunnelTitles.push({
+        el: titleEl,
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius,
+        z: minZ + (index + 1) * ((maxZ - minZ) / (projects.length + 1)),
+        baseZ: minZ + (index + 1) * ((maxZ - minZ) / (projects.length + 1))
+      });
+    });
+
+    // Lightbox elements
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxTitle = lightbox.querySelector('.lightbox-title');
+    const lightboxLink = lightbox.querySelector('.lightbox-link');
+    const lightboxClose = lightbox.querySelector('.lightbox-close');
+
+    // Click to open lightbox
+    document.querySelectorAll('.tunnel-image').forEach(el => {
+      el.addEventListener('click', () => {
+        const img = el.querySelector('img');
+        const projectName = el.dataset.name;
+        const projectUrl = el.dataset.url;
+
+        lightboxImg.src = img.src;
+        lightboxTitle.textContent = projectName;
+        lightboxLink.href = projectUrl;
+        lightbox.classList.add('active');
+      });
+    });
+
+    // Close lightbox
+    lightboxClose.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+        lightbox.classList.remove('active');
+      }
+    });
+
+    // Scroll to move through space
+    window.addEventListener('wheel', (e) => {
+      cameraZ += e.deltaY * 3;
+    }, { passive: true });
+
+    // Animation loop
+    function animate() {
+      tunnelImages.forEach(item => {
+        // Calculate apparent Z position relative to camera
+        let apparentZ = item.z - cameraZ;
+
+        // Wrap around for infinite scroll effect
+        const range = maxZ - minZ;
+        while (apparentZ > maxZ) {
+          apparentZ -= range;
+          item.z -= range;
+          const angle = Math.random() * Math.PI * 2;
+          const radius = 400 + Math.random() * 600;
+          item.x = Math.cos(angle) * radius;
+          item.y = Math.sin(angle) * radius;
+        }
+        while (apparentZ < minZ) {
+          apparentZ += range;
+          item.z += range;
+          const angle = Math.random() * Math.PI * 2;
+          const radius = 400 + Math.random() * 600;
+          item.x = Math.cos(angle) * radius;
+          item.y = Math.sin(angle) * radius;
+        }
+
+        // Calculate scale, opacity and z-index based on depth
+        const depthRange = maxZ - minZ;
+        const normalizedZ = (apparentZ - minZ) / depthRange;
+        // Scale: 0.05 at far end, 1.3 at near end
+        const scale = 0.05 + normalizedZ * 1.25;
+        const opacity = Math.pow(normalizedZ, 0.3);
+        const zIndex = Math.round(normalizedZ * 1000) + 1;
+
+        // Position spread - balanced between clustered and edge
+        const positionScale = 0.05 + normalizedZ * 0.7;
+        const projectedX = item.x * positionScale;
+        const projectedY = item.y * positionScale;
+
+        item.el.style.transform = `translate(calc(-50% + ${projectedX}px), calc(-50% + ${projectedY}px)) scale(${scale})`;
+        item.el.style.width = item.width + 'px';
+        item.el.style.height = item.height + 'px';
+        item.el.style.opacity = opacity;
+        item.el.style.zIndex = zIndex;
+      });
+
+      // Animate floating titles
+      tunnelTitles.forEach(item => {
+        let apparentZ = item.z - cameraZ;
+
+        // Wrap around for infinite scroll
+        const range = maxZ - minZ;
+        while (apparentZ > maxZ) {
+          apparentZ -= range;
+          item.z -= range;
+        }
+        while (apparentZ < minZ) {
+          apparentZ += range;
+          item.z += range;
+        }
+
+        // Calculate scale, opacity and z-index
+        const normalizedZ = (apparentZ - minZ) / (maxZ - minZ);
+        const scale = 0.05 + normalizedZ * 1.25;
+        const opacity = Math.pow(normalizedZ, 0.3);
+        const zIndex = Math.round(normalizedZ * 1000) + 1;
+
+        // Position spread - balanced
+        const positionScale = 0.05 + normalizedZ * 0.7;
+        const projectedX = item.x * positionScale;
+        const projectedY = item.y * positionScale;
+
+        item.el.style.transform = `translate(calc(-50% + ${projectedX}px), calc(-50% + ${projectedY}px)) scale(${scale})`;
+        item.el.style.opacity = opacity;
+        item.el.style.zIndex = zIndex;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+
     // Cursor echo effect
     let lastEchoTime = 0;
     const echoInterval = 25;
@@ -581,241 +587,7 @@
         setTimeout(() => dot.remove(), 150);
       }, 50);
     });
-
-    // Hover to show project images with random positions
-    const projectItems = document.querySelectorAll('.project-item');
-    const projectImageSets = document.querySelectorAll('.project-images');
-    const projectDescription = document.getElementById('project-description');
-    const carouselNav = document.getElementById('carousel-nav');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('img');
-    let activeImageSet = null;
-
-    // Apply staggered fade-in
-    projectImageSets.forEach(set => {
-      const wrappers = set.querySelectorAll('.image-wrapper');
-      wrappers.forEach((wrapper, index) => {
-        const img = wrapper.querySelector('img');
-        if (img) img.style.transitionDelay = (index * 0.1) + 's';
-      });
-    });
-
-    // Drag to scroll - using document level events
-    let isDragging = false;
-    let dragSet = null;
-    let dragStartX = 0;
-    let dragScrollLeft = 0;
-
-    document.addEventListener('mousedown', (e) => {
-      const set = e.target.closest('.project-images.active');
-      if (!set) return;
-
-      dragSet = set;
-      dragStartX = e.pageX;
-      dragScrollLeft = set.scrollLeft;
-      isDragging = false;
-      set.classList.add('dragging');
-      e.preventDefault();
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!dragSet) return;
-
-      const walk = e.pageX - dragStartX;
-      if (Math.abs(walk) > 5) {
-        isDragging = true;
-      }
-      dragSet.scrollLeft = dragScrollLeft - walk;
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (dragSet) {
-        dragSet.classList.remove('dragging');
-        dragSet = null;
-        setTimeout(() => { isDragging = false; }, 50);
-      }
-    });
-
-    projectItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const projectId = item.dataset.project;
-
-        // Hide all image sets
-        projectImageSets.forEach(set => {
-          set.classList.remove('active');
-        });
-        // Show matching image set and description
-        const targetSet = document.querySelector(`.project-images[data-project="${projectId}"]`);
-        if (targetSet) {
-          targetSet.classList.add('active');
-          activeImageSet = targetSet;
-          // Show carousel nav
-          carouselNav.classList.add('active');
-          // Show description
-          const description = targetSet.dataset.description;
-          if (description && projectDescription) {
-            projectDescription.querySelector('.description-text').textContent = description;
-            projectDescription.classList.remove('active');
-            // Reset position - check if mobile
-            const isMobile = window.innerWidth <= 900;
-            if (isMobile) {
-              // Move description into container after project list
-              const projectsList = document.querySelector('.projects-list');
-              if (projectsList && projectDescription.parentElement !== projectsList.parentElement) {
-                projectsList.parentElement.insertBefore(projectDescription, projectsList.nextSibling);
-              }
-            } else {
-              projectDescription.style.left = '50px';
-              projectDescription.style.bottom = '100px';
-              projectDescription.style.top = 'auto';
-            }
-            // Trigger reflow for animation
-            projectDescription.offsetHeight;
-            projectDescription.classList.add('active');
-          }
-        }
-
-        });
-    });
-
-    // Lightbox state
-    let currentImages = [];
-    let currentIndex = 0;
-
-    // Click on project images to open lightbox
-    document.querySelectorAll('.project-images').forEach(container => {
-      const images = container.querySelectorAll('img');
-      images.forEach((img, index) => {
-        img.addEventListener('click', (e) => {
-          if (isDragging) return;
-          e.preventDefault();
-          e.stopPropagation();
-          currentImages = Array.from(images);
-          currentIndex = index;
-          lightboxImg.src = img.src;
-          lightbox.classList.add('active');
-        });
-      });
-    });
-
-    function showImage(index) {
-      if (index < 0) index = currentImages.length - 1;
-      if (index >= currentImages.length) index = 0;
-      currentIndex = index;
-      lightboxImg.src = currentImages[currentIndex].src;
-    }
-
-    // Arrow buttons
-    document.querySelector('.lightbox-prev').addEventListener('click', (e) => {
-      e.stopPropagation();
-      showImage(currentIndex - 1);
-    });
-
-    document.querySelector('.lightbox-next').addEventListener('click', (e) => {
-      e.stopPropagation();
-      showImage(currentIndex + 1);
-    });
-
-    // Click lightbox background to close
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) {
-        lightbox.classList.remove('active');
-        lightboxImg.src = '';
-      }
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('active')) return;
-
-      if (e.key === 'Escape') {
-        lightbox.classList.remove('active');
-        lightboxImg.src = '';
-      } else if (e.key === 'ArrowLeft') {
-        showImage(currentIndex - 1);
-      } else if (e.key === 'ArrowRight') {
-        showImage(currentIndex + 1);
-      }
-    });
-
-    // Draggable description popup
-    (function() {
-      const popup = document.getElementById('project-description');
-      let isDraggingPopup = false;
-      let popupStartX, popupStartY, popupX, popupY;
-
-      popup.addEventListener('mousedown', (e) => {
-        if (!popup.classList.contains('active')) return;
-        isDraggingPopup = true;
-        popup.classList.add('dragging');
-        popupStartX = e.clientX;
-        popupStartY = e.clientY;
-        popupX = popup.offsetLeft;
-        popupY = popup.offsetTop;
-        // Switch from bottom to top positioning
-        popup.style.bottom = 'auto';
-        popup.style.top = popupY + 'px';
-        e.preventDefault();
-      });
-
-      document.addEventListener('mousemove', (e) => {
-        if (!isDraggingPopup) return;
-        const newX = popupX + (e.clientX - popupStartX);
-        const newY = popupY + (e.clientY - popupStartY);
-        popup.style.left = newX + 'px';
-        popup.style.top = newY + 'px';
-      });
-
-      document.addEventListener('mouseup', () => {
-        if (isDraggingPopup) {
-          isDraggingPopup = false;
-          popup.classList.remove('dragging');
-        }
-      });
-    })();
-
-    // Carousel navigation
-    (function() {
-      const prevBtn = document.querySelector('.carousel-prev');
-      const nextBtn = document.querySelector('.carousel-next');
-      const gap = 40; // Match the CSS gap between images
-
-      prevBtn.addEventListener('click', () => {
-        if (activeImageSet) {
-          const images = activeImageSet.querySelectorAll('.image-wrapper');
-          if (images.length === 0) return;
-          // Find current visible image and scroll to previous
-          const containerLeft = activeImageSet.scrollLeft;
-          for (let i = images.length - 1; i >= 0; i--) {
-            const imgLeft = images[i].offsetLeft;
-            if (imgLeft < containerLeft - 10) {
-              activeImageSet.scrollTo({ left: imgLeft, behavior: 'smooth' });
-              return;
-            }
-          }
-          // If at start, stay at start
-          activeImageSet.scrollTo({ left: 0, behavior: 'smooth' });
-        }
-      });
-
-      nextBtn.addEventListener('click', () => {
-        if (activeImageSet) {
-          const images = activeImageSet.querySelectorAll('.image-wrapper');
-          if (images.length === 0) return;
-          // Find current visible image and scroll to next
-          const containerLeft = activeImageSet.scrollLeft;
-          for (let i = 0; i < images.length; i++) {
-            const imgLeft = images[i].offsetLeft;
-            if (imgLeft > containerLeft + 10) {
-              activeImageSet.scrollTo({ left: imgLeft, behavior: 'smooth' });
-              return;
-            }
-          }
-        }
-      });
-    })();
   </script>
 
-  </body>
+</body>
 </html>

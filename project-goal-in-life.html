@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Goal in Life | Sebastian Sanchez</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
+  <style>
+    html, body { overflow-x: auto !important; overflow-y: hidden !important; height: 100vh !important; }
+    .projects-list { position: fixed; top: 2rem; left: 2rem; z-index: 100; display: flex; flex-direction: column; gap: 0.6rem; }
+    .project-item { display: flex; align-items: baseline; gap: 1rem; text-decoration: none; transition: background-color 0.2s ease; padding: 0.25rem 0.5rem; margin-left: -0.5rem; width: fit-content; }
+    .project-item:hover { background-color: #DFFF00; }
+    .project-item.active { background-color: rgba(255, 70, 162, 0.4); }
+    .project-number { font-size: 15px; font-weight: 500; color: var(--color-text-muted); letter-spacing: 0.05em; }
+    .project-item.active .project-number { color: var(--color-text-muted); }
+    .project-name { font-size: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text); }
+    .project-item.active .project-name { color: var(--color-text); }
+    .project-description { position: fixed; left: 50px; bottom: 100px; font-size: 13px; line-height: 1.5; color: var(--color-text); background-color: var(--color-bg); border: 2px solid var(--color-text); padding: 1rem 1.25rem; max-width: 300px; z-index: 500; cursor: grab; animation: shake 0.4s ease; }
+    .project-description.dragging { cursor: grabbing; }
+    .project-description .drag-hint { display: block; font-size: 14px; margin-bottom: 0.5rem; opacity: 0.6; }
+    @keyframes shake { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-2deg); } 40% { transform: rotate(2deg); } 60% { transform: rotate(-1deg); } 80% { transform: rotate(1deg); } }
+    .project-images { position: fixed; top: 50%; transform: translateY(-50%); left: 320px; right: 0; display: flex; flex-wrap: nowrap; gap: 40px; padding-right: 60px; align-items: flex-start; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -ms-overflow-style: none; cursor: grab; }
+    .project-images::-webkit-scrollbar { display: none; }
+    .project-images.dragging { cursor: grabbing; }
+    .project-images img { height: 70vh; width: auto; object-fit: contain; pointer-events: auto; transition: opacity 0.2s ease; }
+    .project-images img:hover { opacity: 0.8; }
+    .image-wrapper { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-start; }
+    .carousel-nav { position: fixed; bottom: 5rem; right: 2rem; display: flex; gap: 0.5rem; z-index: 500; }
+    .carousel-nav button { background: var(--color-bg); border: 2px solid var(--color-text); width: 40px; height: 40px; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease; color: var(--color-text); }
+    .carousel-nav button:hover { background-color: #DFFF00; }
+    .lightbox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0); display: flex; justify-content: center; align-items: center; z-index: 10000; pointer-events: none; transition: background 0.3s ease; }
+    .lightbox.active { background: rgba(0,0,0,0.9); pointer-events: auto; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; transform: scale(0.3); opacity: 0; transition: transform 0.4s ease, opacity 0.3s ease; }
+    .lightbox.active img { transform: scale(1); opacity: 1; }
+    .lightbox-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; color: #FF46A2; font-size: 3rem; font-weight: bold; padding: 1rem; opacity: 0; transition: opacity 0.2s ease; z-index: 10001; }
+    .lightbox.active .lightbox-arrow { opacity: 0.85; }
+    .lightbox.active .lightbox-arrow:hover { opacity: 1; }
+    .lightbox-prev { left: 2rem; }
+    .lightbox-next { right: 2rem; }
+    footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background-color: var(--color-bg); }
+    @media (max-width: 900px) {
+      html, body { overflow-x: hidden !important; overflow-y: auto !important; height: auto !important; }
+      .projects-list { position: relative; top: auto; left: auto; padding: 1.5rem; }
+      .project-description { position: relative; left: auto !important; bottom: auto !important; top: auto !important; max-width: 100%; margin: 1rem 1.5rem; }
+      .project-images { position: relative; top: auto; left: auto; right: auto; transform: none; flex-direction: column; padding: 1rem; padding-bottom: 100px; overflow: visible; gap: 20px; }
+      .project-images img { height: auto; width: 100%; max-width: 100%; }
+      .carousel-nav { display: none; }
+      .lightbox-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="projects-list">
+    <a href="project-augmented-intelligence.html" class="project-item"><span class="project-number">[01]</span><span class="project-name">Augmented Intelligence</span></a>
+    <a href="project-goal-in-life.html" class="project-item active"><span class="project-number">[02]</span><span class="project-name">A Goal in Life</span></a>
+    <a href="project-on-nfts.html" class="project-item"><span class="project-number">[03]</span><span class="project-name">On NFTs</span></a>
+    <a href="project-keith-haring.html" class="project-item"><span class="project-number">[04]</span><span class="project-name">Keith Haring Amiga</span></a>
+  </div>
+  <div class="project-description" id="project-description">
+    <span class="drag-hint">&#128302;</span>
+    <span class="description-text">A Goal in Life: Leo Messi x Refik Anadol was a groundbreaking collaboration that transformed Messi's favorite career goal into an immersive AI artwork. The piece sold for $1.87 million at Christie's, with proceeds benefiting charity.</span>
+  </div>
+  <div class="project-images" id="project-images">
+    <div class="image-wrapper"><img src="images/goal-in-life/goal1.jpg" alt="A Goal in Life 1"></div>
+    <div class="image-wrapper"><img src="images/goal-in-life/goal2.png" alt="A Goal in Life 2"></div>
+    <div class="image-wrapper"><img src="images/goal-in-life/goal3.avif" alt="A Goal in Life 3"></div>
+    <div class="image-wrapper"><img src="images/goal-in-life/goal4.png" alt="A Goal in Life 4"></div>
+    <div class="image-wrapper"><img src="images/goal-in-life/goal5.png" alt="A Goal in Life 5"></div>
+    <div class="image-wrapper"><img src="images/goal-in-life/goal6.png" alt="A Goal in Life 6"></div>
+  </div>
+  <div class="carousel-nav"><button class="carousel-prev">←</button><button class="carousel-next">→</button></div>
+  <div class="lightbox" id="lightbox"><button class="lightbox-arrow lightbox-prev">&larr;</button><img src="" alt="Enlarged image"><button class="lightbox-arrow lightbox-next">&rarr;</button></div>
+  <footer><nav class="top-nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="work.html">Work</a><a href="writings.html">Teaching & Talks</a><a href="index.html" class="footer-link">&copy; 2026 Sebastian Sanchez</a></nav></footer>
+  <script>
+    let lastEchoTime = 0;
+    document.addEventListener('mousemove', (e) => { const now = Date.now(); if (now - lastEchoTime < 25) return; lastEchoTime = now; const dot = document.createElement('div'); dot.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:20px;height:20px;border-radius:50%;background-color:#FF46A2;pointer-events:none;z-index:9998;opacity:0.5;transform:translate(-50%,-50%);transition:opacity 0.15s ease-out;`; document.body.appendChild(dot); setTimeout(() => { dot.style.opacity = '0'; setTimeout(() => dot.remove(), 150); }, 50); });
+    const imageContainer = document.getElementById('project-images'); let isDragging = false; let startX, scrollLeft;
+    imageContainer.addEventListener('mousedown', (e) => { isDragging = false; startX = e.pageX; scrollLeft = imageContainer.scrollLeft; imageContainer.classList.add('dragging'); });
+    document.addEventListener('mousemove', (e) => { if (startX === undefined) return; const walk = e.pageX - startX; if (Math.abs(walk) > 5) isDragging = true; imageContainer.scrollLeft = scrollLeft - walk; });
+    document.addEventListener('mouseup', () => { startX = undefined; imageContainer.classList.remove('dragging'); setTimeout(() => { isDragging = false; }, 50); });
+    const prevBtn = document.querySelector('.carousel-prev'); const nextBtn = document.querySelector('.carousel-next'); const images = imageContainer.querySelectorAll('.image-wrapper');
+    prevBtn.addEventListener('click', () => { const containerLeft = imageContainer.scrollLeft; for (let i = images.length - 1; i >= 0; i--) { if (images[i].offsetLeft < containerLeft - 10) { imageContainer.scrollTo({ left: images[i].offsetLeft, behavior: 'smooth' }); return; } } imageContainer.scrollTo({ left: 0, behavior: 'smooth' }); });
+    nextBtn.addEventListener('click', () => { const containerLeft = imageContainer.scrollLeft; for (let i = 0; i < images.length; i++) { if (images[i].offsetLeft > containerLeft + 10) { imageContainer.scrollTo({ left: images[i].offsetLeft, behavior: 'smooth' }); return; } } });
+    const lightbox = document.getElementById('lightbox'); const lightboxImg = lightbox.querySelector('img'); const allImages = Array.from(imageContainer.querySelectorAll('img')); let currentIndex = 0;
+    allImages.forEach((img, index) => { img.addEventListener('click', () => { if (isDragging) return; currentIndex = index; lightboxImg.src = img.src; lightbox.classList.add('active'); }); });
+    function showImage(index) { currentIndex = (index + allImages.length) % allImages.length; lightboxImg.src = allImages[currentIndex].src; }
+    lightbox.querySelector('.lightbox-prev').addEventListener('click', (e) => { e.stopPropagation(); showImage(currentIndex - 1); });
+    lightbox.querySelector('.lightbox-next').addEventListener('click', (e) => { e.stopPropagation(); showImage(currentIndex + 1); });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('active'); });
+    document.addEventListener('keydown', (e) => { if (!lightbox.classList.contains('active')) return; if (e.key === 'Escape') lightbox.classList.remove('active'); if (e.key === 'ArrowLeft') showImage(currentIndex - 1); if (e.key === 'ArrowRight') showImage(currentIndex + 1); });
+    const popup = document.getElementById('project-description'); let isDraggingPopup = false; let popupStartX, popupStartY, popupX, popupY;
+    popup.addEventListener('mousedown', (e) => { isDraggingPopup = true; popup.classList.add('dragging'); popupStartX = e.clientX; popupStartY = e.clientY; popupX = popup.offsetLeft; popupY = popup.offsetTop; popup.style.bottom = 'auto'; popup.style.top = popupY + 'px'; e.preventDefault(); });
+    document.addEventListener('mousemove', (e) => { if (!isDraggingPopup) return; popup.style.left = (popupX + e.clientX - popupStartX) + 'px'; popup.style.top = (popupY + e.clientY - popupStartY) + 'px'; });
+    document.addEventListener('mouseup', () => { isDraggingPopup = false; popup.classList.remove('dragging'); });
+  </script>
+</body>
+</html>
