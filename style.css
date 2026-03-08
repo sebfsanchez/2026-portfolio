@@ -302,10 +302,20 @@ footer .footer-link:hover {
   }
 }
 
-/* Small height screens */
-@media (max-height: 700px) {
-  .hero img {
-    max-height: 50vh;
+/* Small height screens (13" laptops) */
+@media (max-height: 900px) {
+  .carousel-slide {
+    max-height: 45vh;
+  }
+
+  .bio p {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-height: 750px) {
+  .carousel-slide {
+    max-height: 40vh;
   }
 
   .bio p {
@@ -314,7 +324,7 @@ footer .footer-link:hover {
   }
 
   .bio {
-    margin-top: 1rem;
+    margin-top: 0.75rem;
   }
 }
 
