@@ -304,14 +304,27 @@ footer .footer-link:hover {
 
 /* Small height screens (13" laptops) */
 @media (max-height: 900px) {
-  .carousel {
-    max-width: 500px;
+  .carousel-slide {
+    max-height: 45vh;
+  }
+
+  .bio p {
+    font-size: 0.875rem;
   }
 }
 
 @media (max-height: 750px) {
-  .carousel {
-    max-width: 400px;
+  .carousel-slide {
+    max-height: 40vh;
+  }
+
+  .bio p {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  .bio {
+    margin-top: 0.75rem;
   }
 }
 
