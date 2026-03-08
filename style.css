@@ -83,8 +83,9 @@ main {
 
 /* Carousel */
 .carousel {
-  width: 100%;
-  max-width: min(800px, 50vh);
+  width: 55vw;
+  max-width: 800px;
+  min-width: 300px;
   position: relative;
   cursor: none;
 }
@@ -155,8 +156,9 @@ footer {
 
 /* Bio block */
 .bio {
-  width: 100%;
+  width: 55vw;
   max-width: 800px;
+  min-width: 300px;
   margin-top: 0.75rem;
   flex-shrink: 0;
   background-color: var(--color-bg);
