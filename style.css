@@ -84,7 +84,7 @@ main {
 /* Carousel */
 .carousel {
   width: 100%;
-  max-width: 800px;
+  max-width: min(800px, 50vh);
   position: relative;
   cursor: none;
 }
