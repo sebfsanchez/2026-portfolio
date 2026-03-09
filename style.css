@@ -283,12 +283,17 @@ footer .footer-link:hover {
 
   .carousel {
     max-width: 100%;
+    width: 100%;
   }
 
   .carousel-slide {
-    max-height: 40vh;
-    width: auto;
+    width: 100%;
+    height: auto;
     max-width: 100%;
+  }
+
+  .floating-contact {
+    display: none;
   }
 
   .draw-button {
@@ -299,9 +304,6 @@ footer .footer-link:hover {
     gap: 1.5rem;
   }
 
-  .floating-contact {
-    font-size: 0.625rem;
-  }
 }
 
 
