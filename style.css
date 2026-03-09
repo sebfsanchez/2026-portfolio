@@ -238,6 +238,16 @@ footer .footer-link:hover {
 
 /* Mobile */
 @media (max-width: 768px) {
+  html, body {
+    overflow: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  body {
+    height: auto;
+  }
+
   .top-nav {
     flex-wrap: wrap;
     justify-content: center;
@@ -250,18 +260,17 @@ footer .footer-link:hover {
 
   main {
     padding: 1.5rem;
+    justify-content: flex-start;
+    padding-top: 5rem;
   }
 
   .hero {
     max-width: 100%;
   }
 
-  .hero img {
-    max-height: 45vh;
-  }
-
   .bio {
     max-width: 100%;
+    width: 100%;
   }
 
   .bio p {
@@ -290,6 +299,7 @@ footer .footer-link:hover {
     width: 100%;
     height: auto;
     max-width: 100%;
+    max-height: none;
   }
 
   .floating-contact {
