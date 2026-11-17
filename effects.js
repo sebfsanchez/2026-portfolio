@@ -97,20 +97,45 @@
     setInterval(tick, 1000);
 
     const form = el.querySelector('[data-live-prompt]');
-    if (!list || !lines.length) { if (form) setupPrompt(el, form); return; }
+
+    // Each line gets its own list of phrases: one <ul data-live-source> per line
+    // (top line = first list, bottom line = second). Without those lists, the
+    // phrases in data-live-lines alternate between the two lines.
+    const sources = Array.from(el.querySelectorAll('[data-live-source]'));
+    let rows;
+    if (sources.length) {
+      rows = sources
+        .map((s) => Array.from(s.children).map((li) => li.textContent.trim()).filter(Boolean))
+        .filter((r) => r.length);
+      sources.forEach((s) => s.remove());
+    } else {
+      rows = [lines.filter((_, i) => i % 2 === 0), lines.filter((_, i) => i % 2 === 1)]
+        .filter((r) => r.length);
+    }
+
+    if (!list || !rows.length) { if (form) setupPrompt(el, form); return; }
     list.innerHTML = '';
 
     if (reduceMotion) {
-      lines.forEach((l) => { const li = document.createElement('li'); li.textContent = l; list.appendChild(li); });
+      rows.forEach((r) => { const li = document.createElement('li'); li.textContent = r[Math.floor(Math.random() * r.length)]; list.appendChild(li); });
       if (form) setupPrompt(el, form);
       return;
     }
 
-    // Two lines typing at once. Phrases alternate between them (1st, 3rd, 5th… on the
-    // top line; 2nd, 4th, 6th… on the bottom). Each types a phrase, holds, deletes it
-    // quickly, types its next one. Forever.
-    const rows = [lines.filter((_, i) => i % 2 === 0), lines.filter((_, i) => i % 2 === 1)]
-      .filter((r) => r.length);
+    // Random order without repeats: shuffle the list, use every phrase once,
+    // then reshuffle (never starting the new round with the phrase just shown)
+    function shuffled(arr, avoidFirst) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      if (a.length > 1 && a[0] === avoidFirst) [a[0], a[1]] = [a[1], a[0]];
+      return a;
+    }
+
+    // Two lines typing at once. Each types a random phrase from its list, holds,
+    // deletes it quickly, then types another. Forever.
     let promptShown = false;
 
     rows.forEach((phrases, r) => {
@@ -126,8 +151,11 @@
 
       (async function run() {
         await wait(r * 1300); // the bottom line starts a little later
+        let lastShown = null;
         for (;;) {
-          for (const phrase of phrases) {
+          const round = shuffled(phrases, lastShown);
+          lastShown = round[round.length - 1];
+          for (const phrase of round) {
             await typeInto(span, phrase);
             // The visitor prompt appears once the first phrase has typed out
             if (!promptShown && form) { promptShown = true; setupPrompt(el, form); }
