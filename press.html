@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Press | Sebastian Sanchez - Digital Art Strategist NYC</title>
+  <meta name="description" content="Press and selected publications featuring Sebastian Sanchez's work in digital art: The New York Times, Vogue Business, The Art Newspaper, Christie's and more.">
+  <meta name="keywords" content="Sebastian Sanchez, digital art, press, NYC, Christie's, Gucci, Refik Anadol, NFT, AI art">
+  <link rel="canonical" href="https://www.sebastianss.com/press">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
+  <style>
+    html, body {
+      overflow: auto !important;
+      height: auto !important;
+      min-height: 100vh;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    /* Grid: 3 equal columns, tiles line up in rows */
+    .press-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.5rem 1.5rem;
+      padding: 1.5rem 1.5rem 7rem;
+    }
+
+    .press-tile {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-text);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    /* Every image fills its grid cell edge to edge, same shape */
+    .press-tile img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      margin-bottom: 0.75rem;
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+
+    .press-outlet {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .press-title {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    /* Headline highlight rotates tile by tile: chartreuse, cobalt, tomato */
+    .press-tile:hover .press-title,
+    .press-tile:focus-visible .press-title {
+      background-color: var(--chartreuse);
+    }
+    .press-tile:nth-child(3n+2):hover .press-title,
+    .press-tile:nth-child(3n+2):focus-visible .press-title {
+      background-color: var(--cobalt);
+      color: #fff;
+    }
+    .press-tile:nth-child(3n):hover .press-title,
+    .press-tile:nth-child(3n):focus-visible .press-title {
+      background-color: var(--tomato);
+      color: #fff;
+    }
+
+    /* Thin rule under each tile picks up the same rotation */
+    .press-tile:nth-child(3n+2) { border-bottom-color: var(--cobalt); }
+    .press-tile:nth-child(3n) { border-bottom-color: var(--tomato); }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background-color: var(--color-bg);
+    }
+
+    @media (max-width: 900px) {
+      .press-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 768px) {
+      main { padding: 0; }
+    }
+
+    @media (max-width: 560px) {
+      .press-board { grid-template-columns: minmax(0, 1fr); padding: 1rem 1rem 6rem; }
+    }
+  </style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23DFFF00'/></svg>">
+  <meta property="og:image" content="https://www.sebastianss.com/images/preview.jpg">
+  <meta property="og:title" content="Press | Sebastian Sanchez - Digital Art Strategist">
+  <meta property="og:description" content="Press and selected publications featuring Sebastian Sanchez's work in digital art.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.sebastianss.com/press">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.sebastianss.com/images/preview.jpg">
+  <meta name="twitter:title" content="Press | Sebastian Sanchez">
+  <meta name="twitter:description" content="Press and selected publications featuring Sebastian Sanchez's work in digital art.">
+</head>
+<body>
+
+  <main>
+    <h1 class="visually-hidden">Press</h1>
+
+    <div class="press-board">
+
+      <a class="press-tile" href="https://www.nytimes.com/athletic/6509309/2025/07/22/lionel-messi-refik-anadol-artwork-christies/" target="_blank" rel="noopener">
+        <img src="images/press/nyt-messi.jpg" alt="" loading="lazy" width="1200" height="630">
+        <span class="press-outlet">The New York Times</span>
+        <span class="press-title">Digital artwork of Lionel Messi's favorite goal sold for $1.87M to mystery buyer</span>
+      </a>
+
+      <a class="press-tile is-medium" href="https://www.christies.com/en/stories/what-is-ai-art-augmented-intelligence-36dc0897d3584268b5102468a3bf8a8c" target="_blank" rel="noopener">
+        <img src="images/press/christies-ai-art.jpg" alt="" loading="lazy" width="1200" height="750">
+        <span class="press-outlet">Christie's Magazine</span>
+        <span class="press-title">What is AI Art</span>
+      </a>
+
+      <a class="press-tile is-small" href="https://www.vogue.com/article/new-gucci-nfts-combine-fashion-and-art-using-generative-ai" target="_blank" rel="noopener">
+        <img src="images/press/vogue-gucci.jpg" alt="" loading="lazy" width="1200" height="675">
+        <span class="press-outlet">Vogue Business</span>
+        <span class="press-title">New Gucci NFTs combine fashion and art using generative AI</span>
+      </a>
+
+      <a class="press-tile" href="https://www.youtube.com/watch?v=11NV5fyLGh0" target="_blank" rel="noopener">
+        <img src="images/press/ap-messi.jpg" alt="" loading="lazy" width="1200" height="675">
+        <span class="press-outlet">Associated Press</span>
+        <span class="press-title">Live Messi's favorite goal: An immersive AI art installation auctioned for charity</span>
+      </a>
+
+      <a class="press-tile is-small" href="https://www.coindesk.com/web3/2023/05/19/beyond-the-jpeg-web3-is-expanding-the-artists-canvas-through-immersive-irl-experiences" target="_blank" rel="noopener">
+        <img src="images/press/coindesk-jpeg.jpg" alt="" loading="lazy" width="1200" height="675">
+        <span class="press-outlet">CoinDesk</span>
+        <span class="press-title">Beyond the JPEG: Web3 Is Expanding the Artist's Canvas</span>
+      </a>
+
+      <a class="press-tile" href="https://www.theartnewspaper.com/2024/10/11/from-ordinals-to-ownership-christies-explores-new-frontiers-of-blockchain-based-provenance" target="_blank" rel="noopener">
+        <img src="images/press/artnewspaper-ordinals.jpg" alt="" loading="lazy" width="1200" height="720">
+        <span class="press-outlet">The Art Newspaper</span>
+        <span class="press-title">From ordinals to ownership: Christie's explores new frontiers of blockchain-based provenance</span>
+      </a>
+
+      <a class="press-tile is-medium" href="https://news.artnet.com/market/christies-is-still-betting-on-nfts-preps-sale-with-pioneering-artist-robert-alice-2440184" target="_blank" rel="noopener">
+        <img src="images/press/artnet-robert-alice.jpg" alt="" loading="lazy" width="1200" height="848">
+        <span class="press-outlet">Artnet News</span>
+        <span class="press-title">Christie's Is Still Betting on NFTs</span>
+      </a>
+
+      <a class="press-tile" href="https://decrypt.co/148628?p=148628" target="_blank" rel="noopener">
+        <img src="images/press/decrypt-gucci.jpg" alt="" loading="lazy" width="1200" height="600">
+        <span class="press-outlet">Decrypt</span>
+        <span class="press-title">Gucci's Iconic Fashion Is Reimagined in Christie's NFT Art Auction</span>
+      </a>
+
+      <a class="press-tile is-small" href="https://wwd.com/fashion-news/designer-luxury/christies-gucci-explore-generative-art-fashion-1235743907/" target="_blank" rel="noopener">
+        <img src="images/press/wwd-gucci.jpg" alt="" loading="lazy" width="1200" height="1200">
+        <span class="press-outlet">WWD</span>
+        <span class="press-title">Christie's, Gucci Explore Generative Art and Fashion</span>
+      </a>
+
+      <a class="press-tile is-medium" href="https://nftnow.com/the-gateway/digital-art-takes-center-stage-jack-butcher-and-ac-the-collector-share-perspectives-at-christies-panel/" target="_blank" rel="noopener">
+        <img src="images/press/nftnow-gateway.jpg" alt="" loading="lazy" width="1200" height="691">
+        <span class="press-outlet">NFT Now</span>
+        <span class="press-title">Digital Art Takes Center Stage: Collector Perspectives at Christie's</span>
+      </a>
+
+      <a class="press-tile" href="https://www.christies.com/en/stories/art-and-luxury-trends-2024-d22cbce42dd047c9b3120e38d321999d" target="_blank" rel="noopener">
+        <img src="images/press/christies-trends-2024.jpg" alt="" loading="lazy" width="1200" height="750">
+        <span class="press-outlet">Christie's Magazine</span>
+        <span class="press-title">Specialists Speak: The Art and Luxury Trends on Our Radar in 2024</span>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <nav class="top-nav">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/work">Work</a>
+      <a href="/writings">Teaching &amp; Talks</a>
+      <a href="/press">Press</a>
+      <a href="/" class="footer-link">&copy; 2026 Sebastian Sanchez</a>
+    </nav>
+  </footer>
+
+</body>
+</html>

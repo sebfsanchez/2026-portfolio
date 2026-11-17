@@ -39,6 +39,7 @@ if (floatingContact) {
 
 // Recalculate bounds on resize
 window.addEventListener('resize', () => {
+  if (!floatingContact) return;
   const rect = floatingContact.getBoundingClientRect();
   const maxX = window.innerWidth - rect.width - 20;
   const maxY = window.innerHeight - rect.height - 20;
@@ -76,7 +77,8 @@ document.addEventListener('mousemove', (e) => {
   lastEchoTime = now;
 
   const dot = document.createElement('div');
-  const color = (isOverCarousel || isOverScatteredImage(e.clientX, e.clientY)) ? '#DFFF00' : '#FF46A2';
+  const trailColors = ['#0055FF', '#FF3D1F', '#DFFF00'];
+  const color = trailColors[Math.floor(Math.random() * trailColors.length)];
 
   dot.style.cssText = `
     position: fixed;
@@ -207,7 +209,7 @@ const eraserSlider = document.getElementById('eraser-slider');
 if (drawButton && drawCanvas) {
   const ctx = drawCanvas.getContext('2d');
   let isDrawing = false;
-  let currentColor = '#FF46A2';
+  let currentColor = '#FF3D1F';
   let isEraser = false;
   let eraserSize = 20;
   let lastX = 0;

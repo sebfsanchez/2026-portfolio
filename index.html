@@ -53,43 +53,59 @@
       <a href="/about">About</a>
       <a href="/work">Work</a>
       <a href="/writings">Teaching & Talks</a>
+      <a href="/press">Press</a>
     </nav>
   </header>
-
-  <!-- Floating contact link -->
-  <a href="mailto:sebfsanchez@gmail.com" target="_blank" class="floating-contact">
-    <span>Sebastian Sanchez</span>
-    <span>sebfsanchez@gmail.com</span>
-  </a>
 
   <main>
     <!-- Hero carousel -->
     <div class="carousel">
       <div class="carousel-track">
-        <img src="images/homepage/hero.jpg" alt="Image 1" class="carousel-slide active">
+        <img src="images/homepage/hero-2026.jpg" alt="Sebastian Sanchez speaking on a panel, holding a microphone" class="carousel-slide active hero-portrait" width="891" height="1038">
       </div>
-      <div class="carousel-cursor"></div>
-    </div>
-
-    <!-- Hidden image sources for scattering -->
-    <div id="image-sources" style="display: none;">
-      <img src="images/homepage/slide2.png" alt="Image 2">
-      <!-- <img src="images/homepage/slide3.JPG" alt="Image 3"> -->
-      <img src="images/homepage/slide4.JPG" alt="Image 4">
-      <img src="images/homepage/slide5.jpg" alt="Image 5">
-      <img src="images/homepage/slide6.JPG" alt="Image 6">
-      <img src="images/homepage/slide7.JPG" alt="Image 7">
-      <img src="images/homepage/slide8.png" alt="Image 8">
-      <img src="images/homepage/slide9.JPG" alt="Image 9">
-      <img src="images/homepage/slide10.JPG" alt="Image 10">
     </div>
 
     <!-- Bio block -->
     <div class="bio">
-      <p>
+      <p data-typewriter data-cps="80" data-delay="400">
         Sebastian Sanchez is a Digital Art Strategist at Brevan Howard, where he advises on the acquisition, stewardship, and management of digital art as part of a family office private collection. He also teaches at Columbia University, where his graduate course examines art and technology through historical and market frameworks, and he is a mentor at NEW INC, the New Museum's incubator for art, design, and technology.
       </p>
     </div>
+
+    <!-- Live section under the bio: two lines that type, delete and type the
+         next phrase. Edit or add phrases in the list below. -->
+    <section class="live-block live-section" data-live aria-label="Live notes">
+      <ul data-live-lines>
+        <li>Sebastian is in New York.</li>
+        <li>He is thinking about preserving digital art.</li>
+        <li>He recently attended Glitch Residency.</li>
+        <li>He is a member of the Lumen Prize International Selectors Committee.</li>
+        <li>He is thinking about Programmed: Rules, Codes, and Choreographies in Art, 1965–2018 at the Whitney.</li>
+        <li>He mentored Entangled Others for a commission at Kunstsilo in Kristiansand, Norway.</li>
+        <li>He is thinking about collecting digital art.</li>
+        <li>He worked on the $1.87 million sale of A Goal in Life: Leo Messi x Refik Anadol.</li>
+        <li>He is thinking about artport: A History of Internet Art at the Whitney.</li>
+        <li>He is teaching at Columbia University.</li>
+        <li>He is thinking about generative art.</li>
+        <li>He worked on Augmented Intelligence, the first auction focused on AI art.</li>
+        <li>He is thinking about Digital Witness: Revolutions in Design, Photography, and Film at LACMA.</li>
+        <li>He is mentoring at NEW INC.</li>
+        <li>He is thinking about new ways of collecting digital art.</li>
+        <li>He spoke at the launch of SOURCE [On NFTs] x TASCHEN at Christie's.</li>
+        <li>He is thinking about the blockchain.</li>
+        <li>He co-founded ARTXCODE, a platform for generative art.</li>
+        <li>He is thinking about Electric Dreams: Art and Technology Before the Internet at Tate Modern.</li>
+        <li>He spoke on Keith Haring: Pixel Pioneer at Station3 NYC.</li>
+        <li>He is thinking about AI agents.</li>
+        <li>He has worked with Cindy Sherman, Barbara Kruger and Robert Longo.</li>
+        <li>He is thinking about Rhizome.</li>
+        <li>He was a panelist at the Harvard Blockchain Conference.</li>
+        <li>He is thinking about AI art.</li>
+        <li>He was a guest on the Gucci Podcast.</li>
+        <li>He has spoken at Christie's Education, Parsons and NYU ITP.</li>
+        <li>He studied Strategic Design &amp; Management at Parsons.</li>
+      </ul>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -97,39 +113,7 @@
     <a href="/" class="footer-link">&copy; 2026 Sebastian Sanchez</a>
   </footer>
 
-  <!-- Drawing mode UI -->
-  <button class="draw-button">DRAW :)</button>
-  <div class="draw-overlay">
-    <canvas id="draw-canvas"></canvas>
-    <div class="color-palette">
-      <div class="palette-row">
-        <button class="color-swatch active" data-color="#FF46A2" style="background-color: #FF46A2;"></button>
-        <button class="color-swatch" data-color="#DFFF00" style="background-color: #DFFF00;"></button>
-        <button class="color-swatch eraser" data-color="eraser" title="Eraser">⊘</button>
-      </div>
-      <div class="palette-row eraser-row">
-        <span class="eraser-label">Eraser</span>
-        <input type="range" class="eraser-slider" id="eraser-slider" min="5" max="80" value="20">
-      </div>
-      <div class="palette-row">
-        <button class="palette-btn undo-btn" title="Undo">&#8592;</button>
-        <button class="palette-btn redo-btn" title="Redo">&#8594;</button>
-      </div>
-    </div>
-    <button class="draw-send">SAVE & SEND</button>
-    <button class="draw-close">CLOSE</button>
-    <div class="name-popup">
-      <div class="name-popup-content">
-        <label for="drawer-name">Enter your name:</label>
-        <input type="text" id="drawer-name" placeholder="Your name">
-        <div class="name-popup-buttons">
-          <button class="name-cancel">Cancel</button>
-          <button class="name-submit">Send</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="script.js"></script>
+  <script src="effects.js"></script>
 </body>
 </html>

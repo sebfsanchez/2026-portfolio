@@ -20,10 +20,11 @@
     /* Top grid layout */
     .about-grid {
       display: grid;
-      grid-template-columns: 3fr 1fr 1fr 1fr;
+      /* Bio column about 15% wider than before; the extra width grows to the left */
+      grid-template-columns: 3.45fr 1fr 1fr 1fr;
       gap: 2rem;
       padding: 2rem 3rem 2rem 0;
-      max-width: 1100px;
+      max-width: 1170px;
       margin: 0 0 0 auto;
     }
 
@@ -75,6 +76,57 @@
     .about-column a:hover {
       background-color: #DFFF00;
     }
+
+    /* Strip: full width, slides on its own, and can be scrolled or dragged sideways */
+    .photo-strip {
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin: 1.5rem 0 5rem; /* room above the fixed footer */
+      scrollbar-width: none;
+      cursor: grab;
+    }
+
+    .photo-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .photo-strip.is-dragging {
+      cursor: grabbing;
+      user-select: none;
+    }
+
+    .photo-strip-track {
+      display: flex;
+      gap: 0.75rem;
+      width: max-content;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .photo-strip-track li {
+      flex-shrink: 0;
+    }
+
+    .photo-strip-track img,
+    .photo-strip-track video {
+      display: block;
+      height: 46vh;
+      min-height: 240px;
+      width: auto;
+    }
+
+    .photo-strip-track video {
+      aspect-ratio: 16 / 9;
+      background-color: #000;
+      cursor: default;
+    }
+
+    /* The short clip is portrait */
+    .photo-strip-track video.is-portrait {
+      aspect-ratio: 464 / 832;
+    }
+
 
     /* Social links column */
     .social-links {
@@ -153,11 +205,20 @@
         position: relative;
       }
 
+      /* Links in one row instead of a stacked block, so the page starts higher */
       .social-links {
         position: relative;
         top: auto;
         left: auto;
-        padding: 1rem 2rem;
+        padding: 1rem 2rem 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.25rem 1.5rem;
+      }
+
+      .social-links a {
+        margin-bottom: 0;
       }
 
       .about-grid {
@@ -355,7 +416,7 @@
     }
 
     .draw-close:hover {
-      background-color: #FF46A2;
+      background-color: #FF3D1F;
     }
 
     .name-popup {
@@ -402,7 +463,7 @@
     }
 
     .name-popup-content input:focus {
-      border-color: #FF46A2;
+      border-color: #FF3D1F;
     }
 
     .name-popup-buttons {
@@ -492,7 +553,7 @@
   <div class="about-grid">
 
     <!-- Column 1: Bio -->
-    <div class="about-column">
+    <div class="about-column" data-typewriter data-cps="110" data-delay="300">
       <p>Sebastian Sanchez is a Digital Art Strategist at Brevan Howard, where he advises on the acquisition, stewardship, and management of digital art as part of a family office private collection.</p>
       <p>Previously, he was Manager of Digital Art Sales at Christie's, where he led auctions, exhibitions, and partnerships that brought an emerging digital art market to a global stage. His work included the $1.87 million sale of A Goal in Life: Leo Messi x Refik Anadol, the Augmented Intelligence, which was the first auction focused on AI art, and collaborations with partners such as Gucci and TASCHEN.</p>
       <p>Before joining Christie's, Sanchez co-founded ARTXCODE, a platform focused on generative art. Earlier in his career, he led artist collaborations across contemporary art, working with figures including Cindy Sherman, Barbara Kruger, Rashid Johnson, and Robert Longo.</p>
@@ -500,7 +561,7 @@
     </div>
 
     <!-- Column 3: Experience -->
-    <div class="about-column">
+    <div class="about-column" data-typewriter data-cps="40" data-delay="600">
       <h3>Experience</h3>
       <ul>
         <li>Brevan Howard</li>
@@ -512,7 +573,7 @@
     </div>
 
     <!-- Column 4: Education -->
-    <div class="about-column">
+    <div class="about-column" data-typewriter data-cps="40" data-delay="900">
       <h3>Education</h3>
       <ul>
         <li>Parsons Design School</li>
@@ -521,72 +582,147 @@
     </div>
 
     <!-- Column 5: Skills -->
-    <div class="about-column">
+    <div class="about-column" data-typewriter data-cps="40" data-delay="1200">
       <h3>Skills</h3>
       <ul>
         <li>Digital Asset Strategy</li>
         <li>Collection Advisory</li>
         <li>Thought Leadership</li>
-        <li>Cross-Functional Collaboration</li>
+        <li>Cross-Disciplinary Collaboration</li>
         <li>Creative Partnerships</li>
       </ul>
     </div>
 
   </div>
 
-  <!-- Draggable images -->
-  <div class="image-stack">
-    <!-- <img src="images/about/about1.jpeg" alt="Image 1" class="drag-img" draggable="false"
-         style="right: 3vw; top: 269px; width: 14vw; min-width: 180px; z-index: 999;"> -->
-    <!-- <img src="images/about/about2.JPG" alt="Image 2" class="drag-img" draggable="false"
-         style="right: calc(5vw - 20px); top: 568px; width: 17vw; min-width: 220px; z-index: 998;"> -->
-    <!-- <img src="images/about/about3.JPG" alt="Image 3" class="drag-img" draggable="false"
-         style="right: 22vw; top: 488px; width: 16vw; min-width: 200px; z-index: 997;"> -->
-    <img src="images/about/about4.jpg" alt="Image 4" class="drag-img" draggable="false"
-         style="left: 36px; top: 275px; width: 20vw; min-width: 264px; z-index: 996;">
-    <!-- <img src="images/about/about5.JPG" alt="Image 5" class="drag-img" draggable="false"
-         style="right: 18vw; top: 318px; width: 15vw; min-width: 190px; z-index: 995;"> -->
+  <!-- Strip: headshot, photos and the interview in one full-width row.
+       It slides slowly on its own; visitors can also scroll it sideways
+       (trackpad or mouse wheel) or drag it with the mouse. -->
+  <div class="photo-strip" aria-label="Photos and interview" tabindex="0">
+    <ul class="photo-strip-track">
+      <li><img src="images/about/photos/headshot.jpg" alt="Portrait of Sebastian Sanchez" width="1066" height="1600" draggable="false"></li>
+      <li><img src="images/augmented-intelligence/augmented21.jpg" alt="Sebastian Sanchez in front of tapestries at Augmented Intelligence" width="1200" height="1600" draggable="false"></li>
+      <li><img src="images/augmented-intelligence/augmented19.jpg" alt="Sebastian Sanchez being interviewed by a TV crew at Augmented Intelligence" width="1200" height="1600" draggable="false"></li>
+      <li class="photo-strip-video">
+        <video class="is-portrait" muted loop playsinline controls preload="metadata" poster="media/about-clip-poster.jpg" width="464" height="832" aria-label="Short clip of Sebastian Sanchez speaking on stage">
+          <source src="media/about-clip.mp4" type="video/mp4">
+        </video>
+      </li>
+      <li><img src="images/about/photos/photo-10.jpg" alt="Sebastian Sanchez on a panel with museum curators" width="1229" height="1600" draggable="false"></li>
+      <li><img src="images/about/photos/photo-01.jpg" alt="" width="1600" height="1052" draggable="false"></li>
+      <li><img src="images/about/photos/photo-02.jpg" alt="" width="1600" height="1066" draggable="false"></li>
+      <li><img src="images/about/photos/photo-03.jpg" alt="" width="1600" height="1200" draggable="false"></li>
+      <li class="photo-strip-video">
+        <video muted loop playsinline controls preload="metadata" poster="media/interview-poster.jpg" width="1280" height="720" aria-label="Interview with Sebastian Sanchez, 4 minutes">
+          <source src="media/interview.mp4" type="video/mp4">
+        </video>
+      </li>
+      <li><img src="images/about/photos/photo-09.jpg" alt="Sebastian Sanchez interviewed by a TV crew in front of the A Goal in Life installation" width="1200" height="1600" draggable="false"></li>
+      <li><img src="images/about/photos/photo-04.jpg" alt="" width="1600" height="1066" draggable="false"></li>
+      <li><img src="images/about/photos/photo-06.jpg" alt="" width="1600" height="789" draggable="false"></li>
+      <li><img src="images/about/photos/photo-07.jpg" alt="" width="1600" height="1066" draggable="false"></li>
+      <li><img src="images/about/photos/photo-08.jpg" alt="" width="1600" height="1067" draggable="false"></li>
+    </ul>
   </div>
+  <script>
+    (function () {
+      var strip = document.querySelector('.photo-strip');
+      var track = strip && strip.querySelector('.photo-strip-track');
+      if (!track) return;
 
-  <!-- Drawing mode UI -->
-  <button class="draw-button">DRAW :)</button>
-  <div class="draw-overlay">
-    <div class="draw-images">
-      <img src="images/about/about1.jpeg" alt="Image 1" class="draw-img" style="right: 3vw; top: 269px; width: 14vw; min-width: 180px;">
-      <img src="images/about/about2.JPG" alt="Image 2" class="draw-img" style="right: calc(5vw - 20px); top: 568px; width: 17vw; min-width: 220px;">
-      <img src="images/about/about3.JPG" alt="Image 3" class="draw-img" style="right: 22vw; top: 488px; width: 16vw; min-width: 200px;">
-      <img src="images/about/about4.jpg" alt="Image 4" class="draw-img" style="left: 36px; top: 275px; width: 20vw; min-width: 264px;">
-      <img src="images/about/about5.JPG" alt="Image 5" class="draw-img" style="right: 18vw; top: 318px; width: 15vw; min-width: 190px;">
-    </div>
-    <canvas id="draw-canvas"></canvas>
-    <div class="color-palette">
-      <div class="palette-row">
-        <button class="color-swatch active" data-color="#FF46A2" style="background-color: #FF46A2;"></button>
-        <button class="color-swatch" data-color="#DFFF00" style="background-color: #DFFF00;"></button>
-        <button class="color-swatch eraser" data-color="eraser" title="Eraser">⊘</button>
-      </div>
-      <div class="palette-row eraser-row">
-        <span class="eraser-label">Eraser</span>
-        <input type="range" class="eraser-slider" id="eraser-slider" min="5" max="80" value="20">
-      </div>
-      <div class="palette-row">
-        <button class="palette-btn undo-btn" title="Undo">←</button>
-        <button class="palette-btn redo-btn" title="Redo">→</button>
-      </div>
-    </div>
-    <button class="draw-send">SAVE & SEND</button>
-    <button class="draw-close">CLOSE</button>
-    <div class="name-popup">
-      <div class="name-popup-content">
-        <label for="drawer-name">Enter your name:</label>
-        <input type="text" id="drawer-name" placeholder="Your name">
-        <div class="name-popup-buttons">
-          <button class="name-cancel">Cancel</button>
-          <button class="name-submit">Send</button>
-        </div>
-      </div>
-    </div>
-  </div>
+      var SPEED = 35; // pixels per second while sliding on its own
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Three copies of the row, so it can loop seamlessly in both directions
+      var originals = Array.prototype.slice.call(track.children);
+      for (var k = 0; k < 2; k++) {
+        originals.forEach(function (li) {
+          var copy = li.cloneNode(true);
+          copy.setAttribute('aria-hidden', 'true');
+          copy.querySelectorAll('video').forEach(function (v) { v.setAttribute('tabindex', '-1'); });
+          track.appendChild(copy);
+        });
+      }
+
+      // Width of one full set; we keep the scroll position inside the middle copy
+      function setWidth() {
+        return track.children[originals.length].offsetLeft - track.children[0].offsetLeft;
+      }
+      function wrap() {
+        var w = setWidth();
+        if (w <= 0) return;
+        if (strip.scrollLeft < w * 0.5) strip.scrollLeft += w;
+        else if (strip.scrollLeft > w * 1.5) strip.scrollLeft -= w;
+      }
+      function start() { var w = setWidth(); if (w > 0) strip.scrollLeft = w; }
+      track.querySelectorAll('img').forEach(function (img) { img.addEventListener('load', wrap); });
+      start();
+      window.addEventListener('load', start);
+
+      // Never stops for hovering or scrolling: scrolling just pushes it along while
+      // it keeps sliding. It only holds still while being dragged, or while a
+      // video is playing with its sound turned on.
+
+      // A normal mouse wheel (up/down) over the strip moves it sideways
+      strip.addEventListener('wheel', function (e) {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          strip.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      // Every video plays muted on its own while it's on screen, and pauses when
+      // it slides out of view. The strip only stops if someone turns the sound on.
+      var videos = Array.prototype.slice.call(track.querySelectorAll('video'));
+      videos.forEach(function (v) { v.muted = true; });
+      function watching() {
+        return videos.some(function (v) { return !v.paused && !v.muted; });
+      }
+      function syncVideos() {
+        var box = strip.getBoundingClientRect();
+        var stripOnScreen = box.bottom > 0 && box.top < window.innerHeight;
+        videos.forEach(function (v) {
+          var r = v.getBoundingClientRect();
+          var visible = stripOnScreen && r.right > box.left + 40 && r.left < box.right - 40;
+          if (visible && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+          else if (!visible && !v.paused) v.pause();
+        });
+      }
+      setInterval(syncVideos, 500);
+      syncVideos();
+      strip.addEventListener('scroll', wrap, { passive: true });
+
+      // Drag with the mouse (not on the video, so its controls still work)
+      var dragging = false, dragX = 0, dragStart = 0;
+      strip.addEventListener('pointerdown', function (e) {
+        if (e.pointerType !== 'mouse' || e.target.closest('video')) return;
+        dragging = true; dragX = e.clientX; dragStart = strip.scrollLeft;
+        strip.classList.add('is-dragging');
+        strip.setPointerCapture(e.pointerId);
+      });
+      strip.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        strip.scrollLeft = dragStart - (e.clientX - dragX);
+      });
+      function endDrag() { dragging = false; strip.classList.remove('is-dragging'); }
+      strip.addEventListener('pointerup', endDrag);
+      strip.addEventListener('pointercancel', endDrag);
+
+      // The slow slide itself
+      if (reduceMotion) return;
+      var last = performance.now(), carry = 0;
+      setInterval(function () {
+        var now = performance.now(), dt = (now - last) / 1000;
+        last = now;
+        if (watching() || dragging) return;
+        carry += SPEED * Math.min(dt, 0.1);
+        var step = Math.floor(carry);
+        if (step >= 1) { strip.scrollLeft += step; carry -= step; }
+      }, 16);
+    })();
+  </script>
+
+
 
   <!-- Footer with nav -->
   <footer>
@@ -594,11 +730,12 @@
       <a href="/">Home</a>
       <a href="/about">About</a>
       <a href="/work">Work</a>
-      <a href="/writings">Teaching & Talks</a>
+      <a href="/writings">Teaching & Talks</a><a href="/press">Press</a>
       <a href="/" class="footer-link">&copy; 2026 Sebastian Sanchez</a>
     </nav>
   </footer>
 
+  <script src="effects.js"></script>
   <script>
     // Cursor echo effect
     let lastEchoTime = 0;
@@ -617,7 +754,7 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background-color: #FF46A2;
+        background-color: #FF3D1F;
         pointer-events: none;
         z-index: 9998;
         opacity: 0.5;
@@ -692,7 +829,7 @@
     if (drawButton && drawCanvas) {
       const ctx = drawCanvas.getContext('2d');
       let isDrawing = false;
-      let currentColor = '#FF46A2';
+      let currentColor = '#FF3D1F';
       let isEraser = false;
       let eraserSize = 20;
       let lastDrawX = 0;
