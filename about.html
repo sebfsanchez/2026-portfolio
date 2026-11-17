@@ -502,6 +502,70 @@
       color: var(--color-text);
       border-color: #DFFF00;
     }
+
+    /* ---------- Text shows straight away, in the same mono type ---------- */
+    .about-column.is-mono {
+      font-family: var(--font-mono);
+    }
+
+    /* ---------- Top area: left column (links + name) beside the text grid ---------- */
+    .about-top {
+      display: flex;
+      align-items: stretch;
+      gap: 2rem;
+    }
+
+    .about-side {
+      flex: 1 1 0;           /* takes whatever width the text grid leaves */
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 1.25rem 0 2rem 2rem;
+      box-sizing: border-box;
+    }
+
+    .about-side .social-links {
+      position: static !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .about-side .social-links a {
+      margin-bottom: 0.15rem;
+    }
+
+    .about-top .about-grid {
+      flex: 0 1 1170px;
+      min-width: 0;
+      margin: 0 !important;
+      padding: 2rem 3rem 2rem 0 !important;
+    }
+
+    /* Phones: the links sit in a row above the text */
+    @media (max-width: 768px) {
+      .about-top {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .about-side {
+        flex: none;
+        padding: 1.25rem 1.5rem 0;
+      }
+
+      .about-side .social-links {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.25rem 1.5rem;
+      }
+
+      .about-top .about-grid {
+        padding: 1.5rem !important;
+      }
+    }
   </style>
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -544,19 +608,23 @@
 <body>
 
 
-  <!-- Social Links - fixed top left -->
-  <div class="about-column social-links">
-    <a href="mailto:sebfsanchez@gmail.com">Mail</a>
-    <a href="https://www.linkedin.com/in/sebfsanchez/" target="_blank">LinkedIn</a>
-    <a href="https://www.instagram.com/sebastianss" target="_blank">Instagram</a>
-    <a href="https://x.com/sebastianss527" target="_blank">X</a>
+  <div class="about-top">
+
+  <!-- Left column: links -->
+  <div class="about-side">
+    <div class="about-column social-links">
+      <a href="mailto:sebfsanchez@gmail.com">Mail</a>
+      <a href="https://www.linkedin.com/in/sebfsanchez/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/sebastianss" target="_blank">Instagram</a>
+      <a href="https://x.com/sebastianss527" target="_blank">X</a>
+    </div>
   </div>
 
   <!-- About content grid -->
   <div class="about-grid">
 
     <!-- Column 1: Bio -->
-    <div class="about-column" data-typewriter data-cps="110" data-delay="300">
+    <div class="about-column is-mono">
       <p>Sebastian Sanchez is a Digital Art Strategist at Brevan Howard, where he advises on the acquisition, stewardship, and management of digital art as part of a family office private collection.</p>
       <p>Previously, he was Manager of Digital Art Sales at Christie's, where he led auctions, exhibitions, and partnerships that brought an emerging digital art market to a global stage. His work included the $1.87 million sale of A Goal in Life: Leo Messi x Refik Anadol, the Augmented Intelligence, which was the first auction focused on AI art, and collaborations with partners such as Gucci and TASCHEN.</p>
       <p>Before joining Christie's, Sanchez co-founded ARTXCODE, a platform focused on generative art. Earlier in his career, he led artist collaborations across contemporary art, working with figures including Cindy Sherman, Barbara Kruger, Rashid Johnson, and Robert Longo.</p>
@@ -564,7 +632,7 @@
     </div>
 
     <!-- Column 3: Experience -->
-    <div class="about-column" data-typewriter data-cps="40" data-delay="600">
+    <div class="about-column is-mono">
       <h3>Experience</h3>
       <ul>
         <li>Brevan Howard</li>
@@ -576,7 +644,7 @@
     </div>
 
     <!-- Column 4: Education -->
-    <div class="about-column" data-typewriter data-cps="40" data-delay="900">
+    <div class="about-column is-mono">
       <h3>Education</h3>
       <ul>
         <li>Parsons Design School</li>
@@ -585,7 +653,7 @@
     </div>
 
     <!-- Column 5: Skills -->
-    <div class="about-column" data-typewriter data-cps="40" data-delay="1200">
+    <div class="about-column is-mono">
       <h3>Skills</h3>
       <ul>
         <li>Digital Asset Strategy</li>
@@ -597,6 +665,8 @@
     </div>
 
   </div>
+
+  </div><!-- /about-top -->
 
   <!-- Strip: headshot, photos and the interview in one full-width row.
        It slides slowly on its own; visitors can also scroll it sideways
