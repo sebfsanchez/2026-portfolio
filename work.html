@@ -112,16 +112,152 @@
     }
 
     /* Pill colours rotate row by row: chartreuse, cobalt, tomato */
-    .project-row:nth-child(3n+2) .project-pill { background-color: var(--cobalt); color: #fff; }
-    .project-row:nth-child(3n) .project-pill { background-color: var(--tomato); color: #fff; }
+    /* (nth-of-type counts only the image rows, so the text tickers between them don't shift the colours) */
+    .project-row:nth-of-type(3n+2) .project-pill { background-color: var(--cobalt); color: #fff; }
+    .project-row:nth-of-type(3n) .project-pill { background-color: var(--tomato); color: #fff; }
 
     /* On hover each pill switches to the next colour */
-    .project-row:nth-child(3n+1):hover .project-pill,
-    .project-row:nth-child(3n+1):focus-visible .project-pill { background-color: var(--cobalt); color: #fff; }
-    .project-row:nth-child(3n+2):hover .project-pill,
-    .project-row:nth-child(3n+2):focus-visible .project-pill { background-color: var(--tomato); color: #fff; }
-    .project-row:nth-child(3n):hover .project-pill,
-    .project-row:nth-child(3n):focus-visible .project-pill { background-color: var(--chartreuse); color: var(--color-text); }
+    .project-row:nth-of-type(3n+1):hover .project-pill,
+    .project-row:nth-of-type(3n+1):focus-visible .project-pill { background-color: var(--cobalt); color: #fff; }
+    .project-row:nth-of-type(3n+2):hover .project-pill,
+    .project-row:nth-of-type(3n+2):focus-visible .project-pill { background-color: var(--tomato); color: #fff; }
+    .project-row:nth-of-type(3n):hover .project-pill,
+    .project-row:nth-of-type(3n):focus-visible .project-pill { background-color: var(--chartreuse); color: var(--color-text); }
+
+    /* ---------- Text tickers between the image rows ----------
+       Slim rows of small mono text and links that slide at the same speed as
+       the images and loop the same way. A small label pill sits at the left. */
+    .text-row {
+      position: relative;
+      width: 100%;
+      min-width: 0;
+      height: 46px;
+      overflow: hidden;
+      border-top: 1px solid var(--color-text);
+      border-bottom: 1px solid var(--color-text);
+    }
+
+    .text-track {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      white-space: nowrap;
+    }
+
+    .text-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .text-track.is-dragging {
+      cursor: grabbing;
+      user-select: none;
+    }
+
+    .text-track li {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+
+    /* A small dot between items */
+    .text-track li::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      margin: 0 1.5rem;
+      border-radius: 50%;
+      background-color: var(--tomato);
+    }
+
+    .text-track a {
+      color: inherit;
+      text-decoration: none;
+      padding: 0.2rem 0.3rem;
+      margin: 0 -0.3rem;
+      -webkit-user-drag: none;
+    }
+
+    .text-track a:hover,
+    .text-track a:focus-visible {
+      background-color: var(--chartreuse);
+    }
+
+    .text-track .arrow {
+      margin-left: 0.4em;
+    }
+
+    .text-label {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      z-index: 2;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      pointer-events: none;
+      background-color: var(--chartreuse);
+      color: var(--color-text);
+    }
+
+    .text-label.is-cobalt { background-color: var(--cobalt); color: #fff; }
+    .text-label.is-tomato { background-color: var(--tomato); color: #fff; }
+
+    /* A cluster: one to three tickers stacked with no gap between them */
+    .text-cluster {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .text-cluster .text-row + .text-row {
+      border-top: 0;
+    }
+
+    /* Ticker scales, picked at random for each ticker on each visit */
+    .text-row.t-s  { height: 40px; }
+    .text-row.t-m  { height: 58px; }
+    .text-row.t-l  { height: 92px; }
+    .text-row.t-xl { height: 140px; }
+
+    .text-row.t-m li  { font-size: 20px; }
+    .text-row.t-l li,
+    .text-row.t-xl li {
+      font-family: var(--font-main);
+      letter-spacing: -0.01em;
+    }
+    .text-row.t-l li  { font-size: 44px; }
+    .text-row.t-xl li { font-size: 78px; }
+
+    .text-row.is-thin li { font-weight: 200; }
+    .text-row.is-bold li { font-weight: 800; }
+
+    .text-row.t-l li::after  { width: 12px; height: 12px; margin: 0 2.25rem; }
+    .text-row.t-xl li::after { width: 18px; height: 18px; margin: 0 3rem; }
+
+    @media (max-width: 768px) {
+      .text-row.t-l  { height: 68px; }
+      .text-row.t-xl { height: 96px; }
+      .text-row.t-l li  { font-size: 30px; }
+      .text-row.t-xl li { font-size: 50px; }
+    }
 
     footer {
       position: fixed;
@@ -210,7 +346,83 @@
         <span class="project-pill">Keith Haring Amiga</span>
       </a>
 
+      <a class="project-row" href="/project-future-frequencies">
+        <ul class="project-track">
+          <li><img src="images/future-frequencies/ff-hypebae.jpg" alt=""></li>
+          <li><img src="images/future-frequencies/ff-artplus.jpg" alt=""></li>
+          <li><img src="images/press/decrypt-gucci.jpg" alt=""></li>
+          <li><img src="images/future-frequencies/ff-philstar.jpg" alt=""></li>
+          <li><img src="images/press/wwd-gucci.jpg" alt=""></li>
+          <li><img src="images/future-frequencies/ff-parallel-universes.jpg" alt=""></li>
+        </ul>
+        <span class="project-pill">Future Frequencies</span>
+      </a>
+
     </div>
+
+    <!-- Ticker content. On each visit the page arranges these into tickers of
+         different sizes, scattered among the image rows. Edit or add <li> lines
+         freely; data-label is the small pill shown on the smaller tickers. -->
+    <template id="ticker-pool">
+      <ul data-label="Sales &amp; Projects">
+        <li><a href="https://onlineonly.christies.com/sso?ObjectID=24326.1&amp;LotNumber=1" target="_blank" rel="noopener">A Goal in Life: Leo Messi x Refik Anadol, sold for $1.87M at Christie's<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://onlineonly.christies.com/s/augmented-intelligence/overview/3837" target="_blank" rel="noopener">Augmented Intelligence, Christie's first AI art auction, over $800,000<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="/project-augmented-intelligence">Holly Herndon &amp; Mat Dryhurst, Refik Anadol, Sasha Stiles, Harold Cohen</a></li>
+        <li><a href="https://onlineonly.christies.com/s/keith-haring-pixel-pioneer/overview/3479" target="_blank" rel="noopener">Keith Haring: Pixel Pioneer, five Amiga drawings, $1,587,600<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.christies.com/en/lot/lot-6500905" target="_blank" rel="noopener">Ascend, Koopmans &amp; Wexell: first Bitcoin Ordinal sold live at Christie's, £44,100<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="/project-future-frequencies">Future Frequencies: Christie's x Gucci, generative art and fashion</a></li>
+        <li><a href="/project-on-nfts">Robert Alice generative drop: Christie's first Dutch auction minted on-chain</a></li>
+        <li><a href="/project-on-nfts">On NFTs, exhibition and publication with TASCHEN</a></li>
+        <li>Artist collaborations with Cindy Sherman, Barbara Kruger, Rashid Johnson, Robert Longo</li>
+        <li>Entangled Others commission at Kunstsilo, Kristiansand</li>
+      </ul>
+
+      <ul data-label="Press">
+        <li><a href="https://www.nytimes.com/athletic/6509309/2025/07/22/lionel-messi-refik-anadol-artwork-christies/" target="_blank" rel="noopener">The New York Times: Digital artwork of Lionel Messi's favorite goal sold for $1.87M<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.youtube.com/watch?v=11NV5fyLGh0" target="_blank" rel="noopener">Associated Press: Live Messi's favorite goal, an immersive AI art installation<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://ny1.com/nyc/all-boroughs/news/2025/07/15/christie-s--digital-art--lionel-messi" target="_blank" rel="noopener">NY1: Inside the brain of Lionel Messi through art<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.christies.com/en/stories/what-is-ai-art-augmented-intelligence-36dc0897d3584268b5102468a3bf8a8c" target="_blank" rel="noopener">Christie's Magazine: What is AI Art<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.nssmag.com/en/lifestyle/40186/ai-art-christies-zero-one-revolution-or-threat" target="_blank" rel="noopener">nss magazine: AI Art, Revolution or Threat?<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.theartnewspaper.com/2024/10/11/from-ordinals-to-ownership-christies-explores-new-frontiers-of-blockchain-based-provenance" target="_blank" rel="noopener">The Art Newspaper: From ordinals to ownership<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://news.artnet.com/market/christies-is-still-betting-on-nfts-preps-sale-with-pioneering-artist-robert-alice-2440184" target="_blank" rel="noopener">Artnet News: Christie's Is Still Betting on NFTs<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.christies.com/en/stories/art-and-luxury-trends-2024-d22cbce42dd047c9b3120e38d321999d" target="_blank" rel="noopener">Christie's Magazine: Specialists Speak, trends for 2024<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://nftnow.com/the-gateway/digital-art-takes-center-stage-jack-butcher-and-ac-the-collector-share-perspectives-at-christies-panel/" target="_blank" rel="noopener">NFT Now: Digital Art Takes Center Stage<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://decrypt.co/148628?p=148628" target="_blank" rel="noopener">Decrypt: Gucci's Iconic Fashion Reimagined at Christie's<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.vogue.com/article/new-gucci-nfts-combine-fashion-and-art-using-generative-ai" target="_blank" rel="noopener">Vogue Business: New Gucci NFTs combine fashion and art<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://wwd.com/fashion-news/designer-luxury/christies-gucci-explore-generative-art-fashion-1235743907/" target="_blank" rel="noopener">WWD: Christie's, Gucci Explore Generative Art and Fashion<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.coindesk.com/web3/2023/05/19/beyond-the-jpeg-web3-is-expanding-the-artists-canvas-through-immersive-irl-experiences" target="_blank" rel="noopener">CoinDesk: Beyond the JPEG<span class="arrow" aria-hidden="true">↗</span></a></li>
+      </ul>
+
+      <ul data-label="Talks &amp; Teaching">
+        <li><a href="/writings">Understanding the Digital Art Ecosystem, Columbia University</a></li>
+        <li><a href="/writings">The Evolution of Art Collecting: Digital Ownership, Riga Contemporary</a></li>
+        <li><a href="/writings">How Digital Art Is Changing the Art World, Columbia University</a></li>
+        <li><a href="/writings">The Evolution of Collecting: Digital Ownership, Signal on Sale, Seoul</a></li>
+        <li><a href="/writings">Guest Art Critic, NYU ITP</a></li>
+        <li><a href="/writings">AI in Art, Niagara University &amp; Castellani Art Museum</a></li>
+        <li><a href="/writings">The Business of Digital Art, Christie's Education</a></li>
+        <li><a href="/writings">What is a Digital Art Specialist?, Parsons</a></li>
+        <li><a href="/writings">From Canvas to Code, Harvard Blockchain Conference</a></li>
+        <li><a href="/writings">Web3 Collectors Salon, Artists Rights Society</a></li>
+        <li><a href="/writings">Generative Art Today, Proof of People</a></li>
+        <li><a href="/writings">Artist, Collector, Specialist, The Gateway Miami</a></li>
+        <li><a href="/writings">Launch of SOURCE [On NFTs] x TASCHEN, Christie's New York</a></li>
+        <li><a href="https://open.spotify.com/episode/2iBKN7FUXCNVPJQVFrubyv" target="_blank" rel="noopener">Digital Art Post Boom, Le Random podcast<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://open.spotify.com/episode/4fDl7oFLNfNcLdct6GwZnb" target="_blank" rel="noopener">Future Frequencies with Claire Silver &amp; Emi Kusano, Gucci Podcast<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://open.spotify.com/episode/75PaJ2AJRRJqORNbFwMr1o" target="_blank" rel="noopener">Future Frequencies: DAOs &amp; the Artist Botto, Gucci Podcast<span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://podcasts.apple.com/us/podcast/a-comprehensive-guide-to-digital-art-with/id1688280011?i=1000637744078" target="_blank" rel="noopener">A Comprehensive Guide to Digital Art, Context by Boys Club<span class="arrow" aria-hidden="true">↗</span></a></li>
+      </ul>
+
+      <ul data-label="Experience">
+        <li><a href="/about">Digital Art Strategist, Brevan Howard</a></li>
+        <li><a href="/about">Manager of Digital Art Sales, Christie's</a></li>
+        <li><a href="/about">Graduate course, Columbia University Teachers College</a></li>
+        <li><a href="/about">Mentor, NEW INC at the New Museum</a></li>
+        <li><a href="/about">Co-founder, ARTXCODE</a></li>
+        <li><a href="/about">Glitch Residency</a></li>
+        <li><a href="/about">Strategic Design &amp; Management, Parsons</a></li>
+      </ul>
+    </template>
   </main>
 
   <footer>
@@ -225,6 +437,78 @@
   </footer>
 
   <script>
+    // Generative text tickers: on each visit, build tickers from the pool above,
+    // give each a random scale, and scatter them in clusters of one to three
+    // among the image rows. Runs before the circular-row code so tickers loop too.
+    (function () {
+      const pool = document.getElementById('ticker-pool');
+      const imageRows = [...document.querySelectorAll('.project-rows > .project-row')];
+      if (!pool || !imageRows.length) return;
+
+      const lists = [...pool.content.querySelectorAll('ul')].map((u) => ({
+        label: u.dataset.label,
+        items: [...u.children].map((li) => li.innerHTML)
+      }));
+      const rand = (n) => Math.floor(Math.random() * n);
+      const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rand(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+      // Every category once, plus two or three remixes (one may mix all categories)
+      const specs = lists.slice();
+      const extras = 2 + rand(2);
+      for (let k = 0; k < extras; k++) {
+        if (Math.random() < 0.35) specs.push({ label: 'Selected', items: lists.flatMap((l) => l.items) });
+        else specs.push(lists[rand(lists.length)]);
+      }
+
+      // Scales: mostly small and medium, some large, the odd huge one
+      const pickSize = () => { const r = Math.random(); return r < 0.35 ? 't-s' : r < 0.65 ? 't-m' : r < 0.9 ? 't-l' : 't-xl'; };
+      const labelColours = ['', 'is-cobalt', 'is-tomato'];
+
+      // Scatter into clusters after the image rows (at most three per spot)
+      const slots = imageRows.map(() => []);
+      shuffle(specs).forEach((spec) => {
+        let s, tries = 0;
+        do { s = rand(slots.length); tries++; } while (slots[s].length >= 3 && tries < 20);
+        slots[s].push(spec);
+      });
+
+      slots.forEach((specsHere, i) => {
+        if (!specsHere.length) return;
+        const cluster = document.createElement('div');
+        cluster.className = 'text-cluster';
+        specsHere.forEach((spec) => {
+          const size = pickSize();
+          const row = document.createElement('div');
+          row.className = 'text-row ' + size;
+          if (size === 't-l' || size === 't-xl') row.classList.add(Math.random() < 0.5 ? 'is-thin' : 'is-bold');
+          row.setAttribute('role', 'region');
+          row.setAttribute('aria-label', spec.label);
+          if (size === 't-s' || size === 't-m') {
+            const label = document.createElement('span');
+            label.className = 'text-label ' + labelColours[rand(labelColours.length)];
+            label.setAttribute('aria-hidden', 'true');
+            label.textContent = spec.label;
+            row.appendChild(label);
+          }
+          const track = document.createElement('ul');
+          track.className = 'text-track';
+          shuffle(spec.items).forEach((html) => { const li = document.createElement('li'); li.innerHTML = html; track.appendChild(li); });
+          row.appendChild(track);
+          cluster.appendChild(row);
+        });
+        imageRows[i].after(cluster);
+      });
+
+      // Short tickers: repeat their items until one round is wider than the screen
+      document.querySelectorAll('.text-track').forEach((track) => {
+        const originals = [...track.children];
+        let guard = 0;
+        while (track.scrollWidth < window.innerWidth * 1.2 && guard++ < 6) {
+          originals.forEach((li) => track.appendChild(li.cloneNode(true)));
+        }
+      });
+    })();
+
     // Circular rows: each row's images are repeated three times and the scroll
     // position is kept inside the middle copy, so the images always come back
     // around and there's never blank space. Rows slide on their own (about 40px
@@ -234,7 +518,7 @@
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const rows = [];
 
-      document.querySelectorAll('.project-track').forEach((track) => {
+      document.querySelectorAll('.project-track, .text-track').forEach((track) => {
         const originals = [...track.children];
         for (let k = 0; k < 2; k++) {
           originals.forEach((li) => {
@@ -281,14 +565,17 @@
         window.addEventListener('blur', endDrag);
         document.addEventListener('mouseleave', endDrag);
 
-        // The row is a link: stop the browser's own "drag the link" behaviour,
-        // which used to swallow the mouse release and freeze the row
-        const link = track.closest('a');
-        link.setAttribute('draggable', 'false');
-        link.addEventListener('dragstart', (e) => e.preventDefault());
-        link.addEventListener('click', (e) => {
-          if (row.moved) { e.preventDefault(); row.moved = false; }
+        // Stop the browser's own "drag the link" behaviour (it used to swallow the
+        // mouse release and freeze the row), and don't follow a link after a drag.
+        // Image rows are one big link; text tickers contain many small links.
+        const links = track.closest('a') ? [track.closest('a')] : [...track.querySelectorAll('a')];
+        links.forEach((link) => {
+          link.setAttribute('draggable', 'false');
+          link.addEventListener('dragstart', (e) => e.preventDefault());
         });
+        (track.closest('a') || track).addEventListener('click', (e) => {
+          if (row.moved) { e.preventDefault(); e.stopPropagation(); row.moved = false; }
+        }, true);
       });
 
       // The slow slide (never pauses on hover; only while a row is being dragged)
